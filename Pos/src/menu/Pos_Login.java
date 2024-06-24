@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import default_frame.PosFrame;
 import frame_utility.BackgroundTooll;
 import frame_utility.ButtonTool;
 
@@ -95,7 +96,7 @@ public class Pos_Login {
 		            // ex 아디 admin, 비번 12345
 		            if (username.equals("admin") && password.equals("12345")) {
 		                //JOptionPane.showMessageDialog(null, "로그인 성공!");
-		            	Pos_Frame pos = new Pos_Frame();
+		            	PosFrame pos = new PosFrame();
 		        		pos.getButton(0).setBackground(new Color(79, 163, 252));
 		        		pos.getFrame().setVisible(true);
 		                // 여기서 로그인 성공 후 다음 화면으로 전환하는 코드를 추가.
