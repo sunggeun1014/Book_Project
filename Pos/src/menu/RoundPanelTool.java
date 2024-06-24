@@ -13,7 +13,8 @@ import java.awt.geom.RoundRectangle2D;
 import javax.swing.JPanel;
 
 class RoundPanelTool extends JPanel {
-
+	
+	
     private Color backgroundColor;
     private int cornerRadius; // 라운딩 처리할 반지름 크기
     private int borderWidth; // 경계선 두께
