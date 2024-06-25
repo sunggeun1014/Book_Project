@@ -1,4 +1,4 @@
-package menu;
+package frame_utility;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -12,7 +12,7 @@ import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.JPanel;
 
-class RoundPanelTool extends JPanel {
+public class RoundPanelTool extends JPanel {
 	
 	
     private Color backgroundColor;

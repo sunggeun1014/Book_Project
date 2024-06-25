@@ -101,7 +101,7 @@ public class PosFrame {
         backgroundPanel.add(cardPanel);
 
         // JFrame 설정
-       //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(backgroundPanel);
         frame.setSize(screenWidth, screenHight);
         frame.setLocationRelativeTo(null);
@@ -199,7 +199,4 @@ public class PosFrame {
 		return buttons[index]; 
 	}
 	
-	
-	
-
 }
