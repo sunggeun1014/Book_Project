@@ -1,7 +1,6 @@
 package menu;
 
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -21,16 +20,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
+import frame_utility.RoundPanelTool;
 import frame_utility.Utility;
 import menu.pos_member.dto.MembersDTO;
 import menu.pos_member.query.MembersQuery;
-
-import java.awt.Color;
-
-import javax.swing.JPanel;
-
-import frame_utility.RoundPanelTool;
-import frame_utility.TableTool;
 
 public class Pos_MemberManagement {
 	private JPanel contentArea = new RoundPanelTool(40, Color.WHITE);
