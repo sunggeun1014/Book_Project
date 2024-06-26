@@ -25,6 +25,13 @@ import frame_utility.Utility;
 import menu.pos_member.dto.MembersDTO;
 import menu.pos_member.query.MembersQuery;
 
+import java.awt.Color;
+
+import javax.swing.JPanel;
+
+import frame_utility.RoundPanelTool;
+import frame_utility.TableTool;
+
 public class Pos_MemberManagement {
 	private JPanel contentArea = new RoundPanelTool(40, Color.WHITE);
 	private Utility u = new Utility();

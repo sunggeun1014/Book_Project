@@ -31,8 +31,8 @@ public class ButtonTool extends JLabel {
     
 
     // 버튼에 들어갈 text, 버튼 배경색, text문구 색, Font (new Font(글꼴, 속성, 크기)생성후 사용
-    public static ButtonTool createButton(String buttonName,Color backgroundColor, Color foregroundColor, Font font,
-    		int arcWidth, int arcHeight) {
+    public static ButtonTool createButton(String buttonName,Color backgroundColor, Color foregroundColor, Color changeColor, Font font,
+    		int arcWidth, int arcHeight, boolean check) {
         ButtonTool button = new ButtonTool(buttonName);
         button.arcWidth = arcWidth;
         button.arcHeight = arcHeight;
@@ -54,20 +54,28 @@ public class ButtonTool extends JLabel {
                 button.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 
             }
-            
+            //new Color(79, 163, 252);
             @Override
+            
             public void mouseReleased(MouseEvent e) {
-            	Color changeColor = new Color(79, 163, 252);
-            	button.setBackground(changeColor);
-            	Timer timer = new Timer(100, new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        // 타이머가 실행될 때의 동작
-                        button.setBackground(backgroundColor);                      
-                    }
-                });
-            	timer.setRepeats(false);
-            	timer.start();
+            	
+            	if(check) {
+            		Color afterColor = changeColor;
+            		button.setBackground(afterColor);
+	            	Timer timer = new Timer(100, new ActionListener() {
+	                    @Override
+	                    public void actionPerformed(ActionEvent e) {
+	                        // 타이머가 실행될 때의 동작
+	                        button.setBackground(backgroundColor);                      
+	                    }
+	                });
+	            	timer.setRepeats(false);
+	            	timer.start();
+            	}else {
+            		Color afterColor = changeColor;
+                	button.setBackground(afterColor);
+                	button.setForeground(Color.BLACK);
+            	}
             }
 
         });        

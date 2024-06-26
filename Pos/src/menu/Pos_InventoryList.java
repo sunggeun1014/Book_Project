@@ -4,6 +4,8 @@ import java.awt.Color;
 
 import javax.swing.JPanel;
 
+import frame_utility.RoundPanelTool;
+
 public class Pos_InventoryList {
 	public JPanel creatInventoryList() {
 		JPanel inventoryListPanel = new JPanel();

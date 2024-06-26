@@ -199,7 +199,4 @@ public class PosFrame {
 		return buttons[index]; 
 	}
 	
-	
-	
-
 }

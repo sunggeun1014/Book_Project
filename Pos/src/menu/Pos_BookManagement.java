@@ -6,6 +6,7 @@ import java.awt.Font;
 import javax.swing.JPanel;
 
 import frame_utility.ButtonTool;
+import frame_utility.RoundPanelTool;
 
 public class Pos_BookManagement {
 	public JPanel createBookManagement() {
@@ -18,15 +19,15 @@ public class Pos_BookManagement {
 		search.setBounds(0,10,400,40);
 		bookmanagementPanel.add(search);
 		
-		ButtonTool modify = ButtonTool.createButton("수정", new Color(246,247,251), new Color(185,185,186), new Font("돋음", Font.BOLD, 18),15,15);
+		ButtonTool modify = ButtonTool.createButton("수정", new Color(246,247,251), new Color(197,195,195), new Color(180, 181, 184), new Font("돋음", Font.BOLD, 18),15,15,true);
 		modify.setBounds(405,10,40,40);
 		bookmanagementPanel.add(modify);
 		
-		ButtonTool register = ButtonTool.createButton("등록", new Color(246,247,251), new Color(185,185,186), new Font("돋음", Font.BOLD, 18),15,15);
+		ButtonTool register = ButtonTool.createButton("등록", new Color(246,247,251), new Color(197,195,195), new Color(180, 181, 184), new Font("돋음", Font.BOLD, 18),15,15,true);
 		register.setBounds(450,10,40,40);
 		bookmanagementPanel.add(register);
 		
-		ButtonTool delete = ButtonTool.createButton("삭제", new Color(246,247,251), new Color(185,185,186), new Font("돋음", Font.BOLD, 18),15,15);
+		ButtonTool delete = ButtonTool.createButton("삭제", new Color(246,247,251), new Color(197,195,195), new Color(180, 181, 184), new Font("돋음", Font.BOLD, 18),15,15,true);
 		delete.setBounds(495,10,40,40);
 		bookmanagementPanel.add(delete);
 		

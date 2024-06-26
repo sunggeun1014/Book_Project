@@ -72,11 +72,11 @@ public class Pos_Login {
 	       userPassword.setBounds(525,525,400,40);
 	       background.add(userPassword);
 	       
-	       ButtonTool Login = ButtonTool.createButton("로그인", new Color(22, 40, 80), Color.WHITE, new Font("돋음", Font.BOLD, 18),50,50);
+	       ButtonTool Login = ButtonTool.createButton("로그인", new Color(22, 40, 80),Color.WHITE, new Color(79, 163, 252), new Font("돋음", Font.BOLD, 18),50,50,true);
 	       Login.setBounds(525,595,400,40);
 	       background.add(Login);
 	       
-	       ButtonTool Sign = ButtonTool.createButton("회원가입", new Color(22, 40, 80), Color.WHITE, new Font("돋음", Font.BOLD, 18),50,50);
+	       ButtonTool Sign = ButtonTool.createButton("회원가입", new Color(22, 40, 80), Color.WHITE, new Color(79, 163, 252), new Font("돋음", Font.BOLD, 18),50,50,true);
 	       Sign.setBounds(525,645,400,40);
 	       background.add(Sign);
 	       
