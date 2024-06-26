@@ -2,20 +2,16 @@ package menu;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Properties;
 
 import javax.swing.JPanel;
 
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
-
 import frame_utility.ButtonTool;
-import frame_utility.Datetoolbar;
 import frame_utility.RoundPanelTool;
-import menu.salestatus.DateRangeToolbar;
+import menu.homepanel.CalendarApp;
 import menu.salestatus.DetailInfo;
 
 public class Pos_HomePanel {
@@ -59,17 +55,22 @@ public class Pos_HomePanel {
 	    detailinfo.setBounds(0,75,1100,360);        
 	    homePanel.add(detailinfo);
 	    
-	    JPanel page2 = new RoundPanelTool(15, Color.WHITE);
-	    page2.setLayout(null);
-	    page2.setBackground(new Color(246,247,251));
-	    page2.setBounds(0,455,400,380);
-	    homePanel.add(page2);
+	    JPanel calendar = new RoundPanelTool(15, Color.WHITE);
+	    
+	    CalendarApp app = new CalendarApp();
+	    
+	    app.creatCalendarApp(homePanel);
+	    
+	    calendar.setLayout(new GridLayout());
+	    calendar.setBackground(new Color(246,247,251));
+	    calendar.setBounds(0,455,400,380);
+	    homePanel.add(calendar);
 
 	    
 	    JPanel page3 = new RoundPanelTool(15, Color.WHITE);
 	    page3.setLayout(null);
 	    page3.setBackground(new Color(246,247,251));
-	    page3.setBounds(420,455,680,370);
+	    page3.setBounds(420,455,680,380);
 	    homePanel.add(page3);
 	    
 	    return homePanel;
