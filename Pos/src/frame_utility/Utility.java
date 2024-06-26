@@ -1,6 +1,6 @@
 package frame_utility;
 
-import java.awt.BasicStroke;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -8,6 +8,7 @@ import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 public class Utility {
 
@@ -35,7 +36,7 @@ public class Utility {
 		return jpanel;
 	}
 	
-	public JLabel getRoundShapeLabel(int num1, int num2, int border) {
+	public JLabel getRoundShapeLabel(int num1, int num2) {
 		JLabel jLabel = new JLabel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -45,7 +46,6 @@ public class Utility {
 				int width = getWidth();
 				int height = getHeight();
 				
-				g2.setStroke(new BasicStroke(border));
 				g2.setColor(getBackground());
 				g2.fill(new RoundRectangle2D.Double(0, 0, width - 1, height - 1, num1, num2));
 				
@@ -59,7 +59,6 @@ public class Utility {
 		
 		return jLabel;
 	}
-	
 
 	
 }

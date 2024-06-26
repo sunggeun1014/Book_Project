@@ -30,7 +30,7 @@ public class PosFrame {
 	static int screenWidth = 1440;
 	static int screenHight = 1024;
 	
-	private JFrame frame;
+	private static JFrame frame;
 	private static JPanel[] buttons = new JPanel[7];
 	private static JPanel cardPanel;
 	private CardLayout cardLayout;
@@ -101,7 +101,7 @@ public class PosFrame {
         backgroundPanel.add(cardPanel);
 
         // JFrame 설정
-       //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(backgroundPanel);
         frame.setSize(screenWidth, screenHight);
         frame.setLocationRelativeTo(null);

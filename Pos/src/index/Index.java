@@ -1,8 +1,5 @@
 package index;
 
-import java.awt.Color;
-
-import default_frame.PosFrame;
 import menu.Pos_Login;
 
 public class Index {
