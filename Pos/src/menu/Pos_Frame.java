@@ -85,7 +85,7 @@ public class Pos_Frame {
         cardPanel.add(new Pos_HomePanel().createHomePanel(), "homePanel");
         cardPanel.add(new Pos_MemberManagement().creatMemberManagement(), "memberPanel");
         cardPanel.add(new Pos_SaleStatus().creatSaleStatus(), "salesPanel");
-        cardPanel.add(new Pos_OrderList().creatOrderList(), "orderPanel");
+        cardPanel.add(new Pos_OrderList().createOrderList(), "orderPanel");
         cardPanel.add(new Pos_InventoryList().creatInventoryList(), "arrivalPanel");
         cardPanel.add(new Pos_BookManagement().createBookManagement(), "bookPanel");
         cardPanel.add(new Pos_Payment().creatPayment(), "paymentPanel");
