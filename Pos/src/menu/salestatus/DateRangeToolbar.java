@@ -1,8 +1,6 @@
 package menu.salestatus;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.Font;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,11 +21,13 @@ import org.jfree.data.category.CategoryDataset;
 public class DateRangeToolbar extends JPanel {
 		
     private JPanel chartPanel;
+    private JDatePickerImpl startDatePicker;
+    private JDatePickerImpl endDatePicker;
 
 	public DateRangeToolbar(JPanel chartPanel) {
     	this.chartPanel = chartPanel;
         setLayout(null);
-        // Start date picker
+        
         UtilDateModel startModel = new UtilDateModel();
         Properties p = new Properties();
         p.put("text.today", "Today");
@@ -73,21 +73,20 @@ public class DateRangeToolbar extends JPanel {
 
         if (startDate != null && endDate != null) {
         	CategoryDataset dataset = SalesChart.createDataset(startDate, endDate);
-            SalesChart.addChartToPanel(chartPanel, dataset);
-        	
-            String startDateString = dateFormat.format(startDate);
-            String endDateString = dateFormat.format(endDate);
-
-            JOptionPane.showMessageDialog(this, "Selected range:\nStart: " + startDateString + "\nEnd: " + endDateString);
-        } else {
-            JOptionPane.showMessageDialog(this, "Please select both start and end dates.");
-        }
-        
-        
+            SalesChart.addChartToPanel(chartPanel, dataset);        	
+        }   
     }
+    
+    public JDatePickerImpl getStartDatePicker() {
+    	return startDatePicker;
+    }
+    
+    public JDatePickerImpl getEndDatePicker() {
+    	return endDatePicker;
+    }
+    
     // 데이터 피커에 관한 사이즈 조정 메소드
     private void setComponentSize(JDatePickerImpl datePicker, int width, int height) {
-        //datePanel.setPreferredSize(new java.awt.Dimension(width, height));
         datePicker.setPreferredSize(new java.awt.Dimension(width, height));
     }
     
@@ -97,15 +96,13 @@ public class DateRangeToolbar extends JPanel {
         datePanel.setBackground(background);
         datePicker.getJFormattedTextField().setBackground(background);
         datePicker.getJFormattedTextField().setForeground(foreground);
-
-        setBackgroundRecursive(datePanel, background);
     }
     
     // 데이터 피커 버튼 속성 설정 메소드
     private void customizeDatePickerButton(JDatePickerImpl datePicker ,String text) {
        
     	JButton button = (JButton) datePicker.getComponent(1);
-    	button.setBackground(new Color(22, 40, 80));
+    	button.setBackground(new Color(237, 237, 238));
     	button.setForeground(Color.WHITE);
     	button.setFont(new Font("맑은 고딕", Font.BOLD, 12));
     	button.setText(text);
@@ -123,33 +120,26 @@ public class DateRangeToolbar extends JPanel {
     	panel.revalidate();
     	panel.repaint();
     }
-
-    private void setBackgroundRecursive(Container container, Color color) {
-        for (Component c : container.getComponents()) {
-            if (c instanceof Container) {
-                setBackgroundRecursive((Container) c, color);
-            }
-            c.setBackground(color);
-        }
-    }
-    
+  
 	class DateLabelFormatter extends AbstractFormatter {
-	
-	    private String datePattern = "\t\tyyyy년   /   MM월   /   dd일";
-	    private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
-	
-	    @Override
-	    public Object stringToValue(String text) throws ParseException {
-	        return dateFormatter.parseObject(text);
-	    }
-	    
-	    @Override
-	    public String valueToString(Object value) throws ParseException {
-	        if (value != null) {
-	            Calendar cal = (Calendar) value;
-	            return dateFormatter.format(cal.getTime());
-	        }
-	        return "\t\t시작날짜를 선택해 주세요.";
-	    }
+		
+		private String datePattern = "\t\tyyyy년   /   MM월   /   dd일";
+		private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+		
+		@Override
+		public Object stringToValue(String text) throws ParseException {
+			return dateFormatter.parseObject(text);
+		}
+		
+		@Override
+		public String valueToString(Object value) throws ParseException {
+			if (value != null) {
+				Calendar cal = (Calendar) value;
+				return dateFormatter.format(cal.getTime());
+			}
+			return "\t\t시작날짜를 선택해 주세요.";
+		}
 	}
+	
+	
 }

@@ -3,6 +3,8 @@ package menu.salestatus;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.JPanel;
 
@@ -75,18 +77,47 @@ public class SalesChart {
       
     }
 
-    public static CategoryDataset createDataset(java.util.Date startDate, java.util.Date endDate) {
+    public static CategoryDataset createDataset(Date startDate, Date endDate) {
         // 데이터셋 생성
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         
-        int startMonth = startDate.getMonth();
-        int endMonth = endDate.getMonth();
-        
-        // 여기에 데이터 추가 (예: 월별 수지)
-        for(int i = startMonth; i <= endMonth; i++) {
-        	String month = i+1 + "월";
-        	// 매출 DB연동
-        	dataset.addValue(10000, "매출", month);
+        Calendar startCal = Calendar.getInstance();
+        startCal.setTime(startDate);
+
+        Calendar endCal = Calendar.getInstance();
+        endCal.setTime(endDate);
+
+        long diffInMillis = endCal.getTimeInMillis() - startCal.getTimeInMillis();
+        long diffInDays = diffInMillis / (1000 * 60 * 60 * 24);
+
+        if (diffInDays > 30) {
+            // 월 단위 데이터 추가
+            int startMonth = startCal.get(Calendar.MONTH);
+            int startYear = startCal.get(Calendar.YEAR);
+            int endMonth = endCal.get(Calendar.MONTH);
+            int endYear = endCal.get(Calendar.YEAR);
+
+            while (startYear < endYear || (startYear == endYear && startMonth <= endMonth)) {
+                String month = (startMonth + 1) + "월";
+                // 매출 DB 연동
+                dataset.addValue(10000, "매출", month);
+                
+                startMonth++;
+                if (startMonth > 11) {
+                    startMonth = 0;
+                    startYear++;
+                }
+            }
+        } else {
+            // 일 단위 데이터 추가
+            while (!startCal.after(endCal)) {
+                int day = startCal.get(Calendar.DAY_OF_MONTH);
+                String date =  day + "일";
+                // 매출 DB 연동
+                dataset.addValue(1000, "매출", date);
+                
+                startCal.add(Calendar.DAY_OF_MONTH, 1);
+            }
         }
 
         return dataset;

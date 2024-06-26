@@ -20,9 +20,6 @@ import menu.salestatus.SalesChart;
 public class Pos_SaleStatus {
 	
 	private static ButtonTool[] buttons = new ButtonTool[4];
-	private CardLayout cardLayout;
-	private CardLayout detailCardLayout;
-	private JPanel detailinfo;
 	
 	public JPanel creatSaleStatus() {
 		JPanel saleStatus = new JPanel();
@@ -66,7 +63,7 @@ public class Pos_SaleStatus {
 	    JPanel calendar =new RoundPanelTool(15, Color.WHITE);
 	    calendar.setLayout(new GridLayout());
 	    calendar.setBackground(new Color(246,247,251));
-	    calendar.setBounds(600,0,550,80);        
+	    calendar.setBounds(600,5,550,80);        
 	    saleStatus.add(calendar);
 	    
 	    JPanel multi = new RoundPanelTool(15, Color.WHITE);
