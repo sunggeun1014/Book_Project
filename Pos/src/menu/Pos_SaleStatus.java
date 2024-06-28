@@ -1,13 +1,15 @@
 package menu;
 
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Date;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,12 +19,15 @@ import frame_utility.RoundPanelTool;
 import menu.salestatus.DateRangeToolbar;
 import menu.salestatus.DetailInfo;
 import menu.salestatus.SalesChart;
+import menu.salestatus.dto.PurchaseDTO;
+import menu.salestatus.query.SalesstatusQuery;
 
 public class Pos_SaleStatus {
 	
-    private LocalDate today; // 현재 날짜
+    private LocalDate day; // 현재 날짜
 
 	private static ButtonTool[] buttons = new ButtonTool[4];
+	int Sales;
 	
 	public JPanel creatSaleStatus() {
 		JPanel saleStatus = new JPanel();
@@ -48,16 +53,76 @@ public class Pos_SaleStatus {
 				@Override
 				public void mouseReleased(MouseEvent e) {
 					buttonChangeColor(buttons[index]);
+
+					if(index == 0) {
+						
+						LocalDate today = LocalDate.now();
+						Date todaydate = Date.valueOf(today);
+						SalesstatusQuery sql = new SalesstatusQuery();						
+						List<PurchaseDTO> list = sql.getSalesStatus(todaydate, todaydate);
+						
+						
+						for(PurchaseDTO dto : list) {
+							Sales += dto.getPRICE() * dto.getPURCHASE_QTY();
+						}
+						
+
+					}else if(index == 1) {
+						
+						LocalDate yesterday = LocalDate.now().minusDays(1);
+						Date yesterdaydate = Date.valueOf(yesterday);
+						SalesstatusQuery sql = new SalesstatusQuery();						
+						List<PurchaseDTO> list = sql.getSalesStatus(yesterdaydate, yesterdaydate);
+						
+						
+						for(PurchaseDTO dto : list) {
+							Sales += dto.getPRICE() * dto.getPURCHASE_QTY();
+						}
+						
+
+					}else if(index == 2) {
+						
+						LocalDate today = LocalDate.now();
+						LocalDate startOfWeek = LocalDate.now().with(DayOfWeek.MONDAY);
+	                    Date startWeekDate = Date.valueOf(startOfWeek);
+	                    Date todayDate = Date.valueOf(today);
+	                    
+	                    SalesstatusQuery sql = new SalesstatusQuery();						
+						List<PurchaseDTO> list = sql.getSalesStatus(startWeekDate, todayDate);
+						
+						for(PurchaseDTO dto : list) {
+							Sales += dto.getPRICE() * dto.getPURCHASE_QTY();
+						}
+						
+
+						
+					}else if(index == 3) {
+						LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
+                        LocalDate lastDayOfMonth = LocalDate.now();
+                        Date firstDayOfMonthDate = Date.valueOf(firstDayOfMonth);
+                        Date lastDayOfMonthDate = Date.valueOf(lastDayOfMonth);
+                        
+                        SalesstatusQuery sql = new SalesstatusQuery();						
+						List<PurchaseDTO> list = sql.getSalesStatus(firstDayOfMonthDate, lastDayOfMonthDate);
+						
+						for(PurchaseDTO dto : list) {
+							Sales += dto.getPRICE() * dto.getPURCHASE_QTY();
+						}
+						
+						
+					}
+					
 				}
 			});
 			saleStatus.add(buttons[i]);
 		}
 		
 		buttonChangeColor(buttons[0]);
-
+		
 		JPanel detailinfo =new RoundPanelTool(15, Color.WHITE);
 		DetailInfo detail = new DetailInfo();
-		detail.info(detailinfo);
+		String salesText = Integer.toString(Sales);
+		detail.info(detailinfo,salesText);
 	    detailinfo.setLayout(null);
 	    detailinfo.setBackground(new Color(246,247,251));
 	    detailinfo.setBounds(0,75,1100,360);        
