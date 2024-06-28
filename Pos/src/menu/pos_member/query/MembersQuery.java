@@ -47,4 +47,48 @@ public class MembersQuery {
 		return list;
 	}
 
+	public int createMember(MembersDTO dto) {
+		int result = 0;
+		String sql = "INSERT into members(MEMBER_ID, PASSWORD, NAME, PHONE_NUMBER, ADDRESS, DETAILED_ADDRESS) values(?, ?, ?, ?, ?, ?)";
+		try (
+			Connection conn = new DBConnector().getConnection();	
+			PreparedStatement ps = conn.prepareStatement(sql);
+		) {
+			ps.setString(1, dto.getMemberId());
+			ps.setString(2, dto.getPassword());
+			ps.setString(3, dto.getName());
+			ps.setString(4, dto.getPhoneNumber());
+			ps.setString(5, dto.getAddress());
+			ps.setString(6, dto.getDetailedAddress());
+			
+			result = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	public int login(String id, String password) {
+		int result = 0;
+		String sql = "select * from members where member_id = ? AND password = ? ";
+			try (
+				Connection conn = new DBConnector().getConnection();	
+				PreparedStatement ps = conn.prepareStatement(sql);
+				) {
+				ps.setString(1, id);
+				ps.setString(2, password);
+			try (
+				ResultSet rs = ps.executeQuery();
+			) {
+				if(rs.next()) {
+					result = 1;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 }

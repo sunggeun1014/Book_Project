@@ -59,7 +59,7 @@ public class Pos_HomePanel {
 	    
 	    CalendarApp app = new CalendarApp();
 	    
-	    app.creatCalendarApp(homePanel);
+	    app.creatCalendarApp(homePanel,false,true,false);
 	    
 	    calendar.setLayout(new GridLayout());
 	    calendar.setBackground(new Color(246,247,251));

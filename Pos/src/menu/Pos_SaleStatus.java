@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,6 +20,8 @@ import menu.salestatus.SalesChart;
 
 public class Pos_SaleStatus {
 	
+    private LocalDate today; // 현재 날짜
+
 	private static ButtonTool[] buttons = new ButtonTool[4];
 	
 	public JPanel creatSaleStatus() {
@@ -26,10 +29,10 @@ public class Pos_SaleStatus {
 		saleStatus.setBackground(new Color(246,247,251));
 		saleStatus.setLayout(null);
 		
-		buttons[0] = ButtonTool.createButton("어제", new Color(246,247,251), new Color(197,195,195),new Color(180, 181, 184), new Font("맑은 고딕", Font.BOLD, 18),75,75, false);
+		buttons[0] = ButtonTool.createButton("오늘", new Color(246,247,251), new Color(197,195,195),new Color(180, 181, 184), new Font("맑은 고딕", Font.BOLD, 18),75,75, false);
 		buttons[0].setBounds(0,0,125,60);
 		
-	    buttons[1] = ButtonTool.createButton("오늘", new Color(246,247,251), new Color(197,195,195),new Color(180, 181, 184), new Font("맑은 고딕", Font.BOLD, 18),75,75, false);
+	    buttons[1] = ButtonTool.createButton("어제", new Color(246,247,251), new Color(197,195,195),new Color(180, 181, 184), new Font("맑은 고딕", Font.BOLD, 18),75,75, false);
 		buttons[1].setBounds(140,0,125,60);
 	    
 	    buttons[2] = ButtonTool.createButton("이번주", new Color(246,247,251), new Color(197,195,195),new Color(180, 181, 184), new Font("맑은 고딕", Font.BOLD, 18),75,75, false);
@@ -49,6 +52,8 @@ public class Pos_SaleStatus {
 			});
 			saleStatus.add(buttons[i]);
 		}
+		
+		buttonChangeColor(buttons[0]);
 
 		JPanel detailinfo =new RoundPanelTool(15, Color.WHITE);
 		DetailInfo detail = new DetailInfo();
