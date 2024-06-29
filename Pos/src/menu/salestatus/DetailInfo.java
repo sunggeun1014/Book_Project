@@ -12,7 +12,7 @@ public class DetailInfo {
 	private static JLabel[] resultLabels = new JLabel[6];
 	private static JLabel[] comments = new JLabel[3];
 	
-    public void info(JPanel panel) {
+    public void info(JPanel panel, String sales) {
         panel.setLayout(null); // 레이아웃을 null로 설정하여 절대 위치에 컴포넌트를 추가할 수 있도록 함
         panel.setVisible(true); // panel을 보이게 설정 (이미 생성된 경우에 필요할 수 있음)
 
@@ -29,7 +29,7 @@ public class DetailInfo {
         headLabels[3].setBounds(70, 220,150,15); // 위치와 크기 설정
         headLabels[4] = new JLabel("할인");
         headLabels[4].setBounds(450, 220, 150, 15); // 위치와 크기 설정
-        headLabels[5] = new JLabel("오늘 매출");
+        headLabels[5] = new JLabel("매출");
         headLabels[5].setBounds(800,220,150,15); // 위치와 크기 설정
         for(int i = 0; i < headLabels.length; i++) {
         	headLabels[i].setFont(headfont);
@@ -39,7 +39,7 @@ public class DetailInfo {
 
         Font resultfont = new Font("맑은 고딕", Font.BOLD, 40); // 폰트 설정
         
-        resultLabels[0] = new JLabel("120,000,000원");
+        resultLabels[0] = new JLabel(sales);
         resultLabels[0].setBounds(70,105,300,40);
         resultLabels[1] = new JLabel("0원");
         resultLabels[1].setBounds(450,105,300,40);
@@ -70,4 +70,5 @@ public class DetailInfo {
         	panel.add(comments[i]);
         }
     }
+   
 }

@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import default_frame.PosFrame;
 import frame_utility.BackgroundTooll;
 import frame_utility.ButtonTool;
+import menu.pos_member.query.MembersQuery;
 
 public class Pos_Login {
 	public Pos_Login() {
@@ -82,20 +83,22 @@ public class Pos_Login {
 	       
 	       Sign.addMouseListener(new MouseAdapter() {
 	    	   @Override
-		       public void mouseClicked(MouseEvent e) {
+		       public void mouseReleased(MouseEvent e) {
 	    		   new Pos_Sign();
 		       }
 		   });
 
 	        // 로그인 버튼 기능 할당
 	       Login.addMouseListener(new MouseAdapter() {
-	           public void mouseClicked(java.awt.event.MouseEvent e) {
+	           public void mouseReleased(java.awt.event.MouseEvent e) {
 		        	String username = userId.getText().trim();
 		            String password = new String(userPassword.getPassword());
-	
+		            
+		            MembersQuery query = new MembersQuery();
+		            query.login(username, password);
 		            // ex 아디 admin, 비번 12345
-		            if (username.equals("admin") && password.equals("12345")) {
-		                //JOptionPane.showMessageDialog(null, "로그인 성공!");
+		            if (query.login(username, password) == 1) {
+		            	frame.dispose();
 		            	PosFrame pos = new PosFrame();
 		        		pos.getButton(0).setBackground(new Color(79, 163, 252));
 		        		pos.getFrame().setVisible(true);
