@@ -376,11 +376,10 @@ public class Pos_MemberManagement {
             		dto.setDetailedAddress(info[5].getText());
             		
             		int result = member.memberModify(dto);
-            		
             		if(result != 0) {
-            			popup.dispose();
+            			u.popup("수정이 완료되었습니다.", popup, true);
             		} else {
-            			
+            			u.popup("입력이 잘못되었습니다.", popup, false);
             		}
             	}
             }
@@ -422,19 +421,19 @@ public class Pos_MemberManagement {
 	
 	private boolean memberValidation(JTextField[] field) {
 		if(field[1].getText() == null || field[1].getText().equals("") || field[1].getText().equals("비밀번호")) {
-			System.out.println("비밀번호를 입력해 주세요.");
+			u.popup("비밀번호를 입력해 주세요.", popup, false);
 			field[1].requestFocus();
 			return false;
 		} else if(field[1].getText().length() < 4 && field[1].getText().length() <= 30) {
-			System.out.println("비밀번호의 길이는 최소 5자 최대 30자 입니다.");
+			u.popup("비밀번호의 길이는 최소 5자 최대 30자 입니다.", popup, false);
 			field[1].requestFocus();
 			return false;
 		} else if(!u.isPhoneNumber(field[3].getText()) || field[3].getText().equals("") || field[3].getText() == null) {
-			System.out.println("비밀번호를 다시 입력해 주세요 ex) 010-0000-0000");
+			u.popup("<html><body>비밀번호를 다시 입력해 주세요.<br> ex) 010-0000-0000</body></html>", popup, false);
 			field[3].requestFocus();
 			return false;
 		} else if(field[4].getText().equals("") || field[4].getText() == null || field[4].equals("주소")) {
-			System.out.println("주소를 입력해 주세요");
+			u.popup("주소를 입력해 주세요.", popup, false);
 			field[4].requestFocus();
 			return false;
 		}
@@ -504,11 +503,11 @@ public class Pos_MemberManagement {
 	}
 	
 	private void setPurchaseInfo(JLabel[] info) {
-		info[0].setBounds(10, 20, 90, 90);
-		info[1].setBounds(120, 25, 260, 20);
-		info[2].setBounds(120, 50, 260, 20);
-		info[3].setBounds(120, 85, 130, 25);
-		info[4].setBounds(250, 85, 130, 25);
+		info[0].setBounds(30, 20, 90, 90);
+		info[1].setBounds(140, 25, 260, 20);
+		info[2].setBounds(140, 50, 260, 20);
+		info[3].setBounds(140, 85, 130, 25);
+		info[4].setBounds(270, 85, 130, 25);
 		
 		info[1].setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		info[2].setFont(new Font("맑은 고딕", Font.BOLD, 20));
