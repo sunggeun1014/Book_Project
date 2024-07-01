@@ -3,6 +3,10 @@ package menu;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -20,8 +24,9 @@ import frame_utility.BackgroundTooll;
 import frame_utility.ButtonTool;
 
 public class Pos_Login {
+	private JFrame frame;
 	public Pos_Login() {
-		JFrame frame = new JFrame();  // JFrame 생성
+		frame = new JFrame();  // JFrame 생성
 		   frame.setFocusable(true);
 	       // 배경 이미지 세팅
 	       BackgroundTooll background = new BackgroundTooll("images/menu_Login.png");
@@ -72,9 +77,9 @@ public class Pos_Login {
 	       userPassword.setBounds(525,525,400,40);
 	       background.add(userPassword);
 	       
-	       ButtonTool Login = ButtonTool.createButton("로그인", new Color(22, 40, 80),Color.WHITE, new Color(79, 163, 252), new Font("돋음", Font.BOLD, 18),50,50,true);
-	       Login.setBounds(525,595,400,40);
-	       background.add(Login);
+	       ButtonTool login = ButtonTool.createButton("로그인", new Color(22, 40, 80),Color.WHITE, new Color(79, 163, 252), new Font("돋음", Font.BOLD, 18),50,50,true);
+	       login.setBounds(525,595,400,40);
+	       background.add(login);
 	       
 	       ButtonTool Sign = ButtonTool.createButton("회원가입", new Color(22, 40, 80), Color.WHITE, new Color(79, 163, 252), new Font("돋음", Font.BOLD, 18),50,50,true);
 	       Sign.setBounds(525,645,400,40);
@@ -88,28 +93,13 @@ public class Pos_Login {
 		   });
 
 	        // 로그인 버튼 기능 할당
-	       Login.addMouseListener(new MouseAdapter() {
+	       loginListener(login, userId, userPassword);
+	       
+	       login.addMouseListener(new MouseAdapter() {
 	           public void mouseClicked(java.awt.event.MouseEvent e) {
-		        	String username = userId.getText().trim();
-		            String password = new String(userPassword.getPassword());
-	
-		            // ex 아디 admin, 비번 12345
-		            if (username.equals("admin") && password.equals("12345")) {
-		                //JOptionPane.showMessageDialog(null, "로그인 성공!");
-		            	PosFrame pos = new PosFrame();
-		        		pos.getButton(0).setBackground(new Color(79, 163, 252));
-		        		pos.getFrame().setVisible(true);
-		                // 여기서 로그인 성공 후 다음 화면으로 전환하는 코드를 추가.
-		            } else {
-		                JOptionPane.showMessageDialog(null, "로그인 실패. 다시 시도하세요.");
-		            }
-	
-		              
-		            userId.setText("");
-		            userPassword.setText("");
+	        	   loginCheck(login, userId, userPassword);
 	           };
-			});
-
+	       });
 	       
 	       frame.add(background);
 	       frame.setResizable(false);
@@ -118,5 +108,39 @@ public class Pos_Login {
 	       frame.setLocationRelativeTo(null); 
 	       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	       frame.setVisible(true);
+	}
+	
+	public void loginCheck(ButtonTool login, RoundedTextField userId, RoundedPasswordField userPassword) {
+		String username = userId.getText().trim();
+        String password = new String(userPassword.getPassword());
+        // ex 아디 admin, 비번 12345
+        if (username.equals("admin") && password.equals("12345")) {
+            //JOptionPane.showMessageDialog(null, "로그인 성공!");
+        	PosFrame pos = new PosFrame();
+    		pos.getButton(0).setBackground(new Color(79, 163, 252));
+    		pos.getFrame().setVisible(true);
+            // 여기서 로그인 성공 후 다음 화면으로 전환하는 코드를 추가.
+    		frame.dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "로그인 실패. 다시 시도하세요.");
+            userId.requestFocus();
+        }
+          
+	}
+	
+	public void loginListener(ButtonTool login, RoundedTextField userId, RoundedPasswordField userPassword) {
+	    userId.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            loginCheck(login, userId, userPassword);
+	        }
+	    });
+		
+		userPassword.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	loginCheck(login, userId, userPassword);
+            }
+        });
 	}
 }
