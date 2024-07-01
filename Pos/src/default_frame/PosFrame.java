@@ -92,7 +92,7 @@ public class PosFrame {
         // 각 패널을 각페널에 띄우고 싶은 화면 구조를 만들어서 넣어주면 된다.
         cardPanel.add(new Pos_HomePanel().createHomePanel(), "homePanel");
         cardPanel.add(new Pos_MemberManagement().creatMemberManagement(), "memberPanel");
-        cardPanel.add(new Pos_SaleStatus().creatSaleStatus(), "salesPanel");
+        cardPanel.add(new Pos_SaleStatus().createSaleStatus(), "salesPanel");
         cardPanel.add(new Pos_OrderList().createOrderList(), "orderPanel");
         cardPanel.add(new Pos_InventoryList().creatInventoryList(), "arrivalPanel");
         cardPanel.add(new Pos_BookManagement().createBookManagement(), "bookPanel");
@@ -101,7 +101,7 @@ public class PosFrame {
         backgroundPanel.add(cardPanel);
 
         // JFrame 설정
-        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(backgroundPanel);
         frame.setSize(screenWidth, screenHight);
         frame.setLocationRelativeTo(null);

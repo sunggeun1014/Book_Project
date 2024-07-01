@@ -24,28 +24,27 @@ import frame_utility.BackgroundTooll;
 import frame_utility.ButtonTool;
 
 public class Pos_Login {
-	private JFrame frame;
-	public Pos_Login() {
-		frame = new JFrame();  // JFrame 생성
-		   frame.setFocusable(true);
-	       // 배경 이미지 세팅
-	       BackgroundTooll background = new BackgroundTooll("images/menu_Login.png");
-	       background.setLayout(null);
-	       String logoImagePath = "images/icon/mainLogo.png";
-	       		
-	       // Book Store 로고
-	       BufferedImage img = null;
-	        try {
-	            img = ImageIO.read(new File(logoImagePath));
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
-	        
-	        Image logo = img.getScaledInstance(350, 100, Image.SCALE_SMOOTH);
-	       
-	       ImageIcon logoIcon = new ImageIcon(logo);
-	       
-	       JLabel logoLabel = new JLabel(logoIcon);
+   public Pos_Login() {
+      JFrame frame = new JFrame();  // JFrame 생성
+         frame.setFocusable(true);
+          // 배경 이미지 세팅
+          BackgroundTooll background = new BackgroundTooll("images/menu_Login.png");
+          background.setLayout(null);
+          String logoImagePath = "images/icon/mainLogo.png";
+                
+          // Book Store 로고
+          BufferedImage img = null;
+           try {
+               img = ImageIO.read(new File(logoImagePath));
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
+           
+           Image logo = img.getScaledInstance(350, 100, Image.SCALE_SMOOTH);
+          
+          ImageIcon logoIcon = new ImageIcon(logo);
+          
+          JLabel logoLabel = new JLabel(logoIcon);
 
 	       logoLabel.setSize(350, 100);
 	       logoLabel.setLocation(550, 250);
@@ -92,55 +91,54 @@ public class Pos_Login {
 		       }
 		   });
 
-	        // 로그인 버튼 기능 할당
-	       loginListener(login, userId, userPassword);
-	       
-	       login.addMouseListener(new MouseAdapter() {
-	           public void mouseClicked(java.awt.event.MouseEvent e) {
-	        	   loginCheck(login, userId, userPassword);
-	           };
-	       });
-	       
-	       frame.add(background);
-	       frame.setResizable(false);
-	       frame.setContentPane(background);
-	       frame.setSize(1440, 1024);
-	       frame.setLocationRelativeTo(null); 
-	       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	       frame.setVisible(true);
-	}
-	
-	public void loginCheck(ButtonTool login, RoundedTextField userId, RoundedPasswordField userPassword) {
-		String username = userId.getText().trim();
+           // 로그인 버튼 기능 할당
+          loginListener(login, userId, userPassword);
+          
+          login.addMouseListener(new MouseAdapter() {
+              public void mouseClicked(java.awt.event.MouseEvent e) {
+                 loginCheck(login, userId, userPassword);
+              };
+          });
+          
+          frame.add(background);
+          frame.setResizable(false);
+          frame.setContentPane(background);
+          frame.setSize(1440, 1024);
+          frame.setLocationRelativeTo(null); 
+          frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+          frame.setVisible(true);
+   }
+   
+   public void loginCheck(ButtonTool login, RoundedTextField userId, RoundedPasswordField userPassword) {
+      String username = userId.getText().trim();
         String password = new String(userPassword.getPassword());
         // ex 아디 admin, 비번 12345
         if (username.equals("admin") && password.equals("12345")) {
             //JOptionPane.showMessageDialog(null, "로그인 성공!");
-        	PosFrame pos = new PosFrame();
-    		pos.getButton(0).setBackground(new Color(79, 163, 252));
-    		pos.getFrame().setVisible(true);
+           PosFrame pos = new PosFrame();
+          pos.getButton(0).setBackground(new Color(79, 163, 252));
+          pos.getFrame().setVisible(true);
+          
             // 여기서 로그인 성공 후 다음 화면으로 전환하는 코드를 추가.
-    		frame.dispose();
         } else {
             JOptionPane.showMessageDialog(null, "로그인 실패. 다시 시도하세요.");
-            userId.requestFocus();
         }
-          
-	}
-	
-	public void loginListener(ButtonTool login, RoundedTextField userId, RoundedPasswordField userPassword) {
-	    userId.addActionListener(new ActionListener() {
-	        @Override
-	        public void actionPerformed(ActionEvent e) {
-	            loginCheck(login, userId, userPassword);
-	        }
-	    });
-		
-		userPassword.addActionListener(new ActionListener() {
+ 
+   }
+   
+   public void loginListener(ButtonTool login, RoundedTextField userId, RoundedPasswordField userPassword) {
+       userId.addActionListener(new ActionListener() {
+           @Override
+           public void actionPerformed(ActionEvent e) {
+               loginCheck(login, userId, userPassword);
+           }
+       });
+      
+      userPassword.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	loginCheck(login, userId, userPassword);
+               loginCheck(login, userId, userPassword);
             }
         });
-	}
+   }
 }

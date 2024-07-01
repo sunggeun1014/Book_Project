@@ -2,10 +2,11 @@ package menu.salestatus;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
+
 import java.util.Properties;
 
 import javax.swing.JButton;
@@ -68,8 +69,11 @@ public class DateRangeToolbar extends JPanel {
     }
     public void handleSubmit(JDatePickerImpl startDatePicker, JDatePickerImpl endDatePicker) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("\tyyyy-MM-dd");
-        Date startDate = (Date) startDatePicker.getModel().getValue();
-        Date endDate = (Date) endDatePicker.getModel().getValue();
+        Date utilstartDate = ( Date) startDatePicker.getModel().getValue();
+        Date utilendDate = (Date) endDatePicker.getModel().getValue();
+        
+        java.sql.Date startDate = new java.sql.Date(utilstartDate.getTime());
+        java.sql.Date endDate = new java.sql.Date(utilendDate.getTime());
 
         if (startDate != null && endDate != null) {
         	CategoryDataset dataset = SalesChart.createDataset(startDate, endDate);
