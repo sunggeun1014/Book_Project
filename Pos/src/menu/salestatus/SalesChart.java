@@ -3,8 +3,10 @@ package menu.salestatus;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -19,6 +21,9 @@ import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
+
+import menu.salestatus.dto.PurchaseDTO;
+import menu.salestatus.query.SalesstatusQuery;
 
 public class SalesChart {
 
@@ -81,6 +86,8 @@ public class SalesChart {
         // 데이터셋 생성
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         
+        SalesstatusQuery sql = new SalesstatusQuery();
+
         Calendar startCal = Calendar.getInstance();
         startCal.setTime(startDate);
 
@@ -99,22 +106,44 @@ public class SalesChart {
 
             while (startYear < endYear || (startYear == endYear && startMonth <= endMonth)) {
                 String month = (startMonth + 1) + "월";
+
+                // 월의 첫날과 마지막날 계산
+                startCal.set(Calendar.DAY_OF_MONTH, 1);
+                Date monthStartDate = new Date(startCal.getTimeInMillis());
+                startCal.set(Calendar.DAY_OF_MONTH, startCal.getActualMaximum(Calendar.DAY_OF_MONTH));
+                Date monthEndDate = new Date(startCal.getTimeInMillis());
+
                 // 매출 DB 연동
-                dataset.addValue(10000, "매출", month);
-                
+                List<PurchaseDTO> list = sql.getSalesStatus(monthStartDate, monthEndDate);
+                int monthlySales = 0;
+                for (PurchaseDTO dto : list) {
+                    monthlySales += dto.getPRICE() * dto.getPURCHASE_QTY();
+                }
+                dataset.addValue(monthlySales, "매출", month);
+
                 startMonth++;
                 if (startMonth > 11) {
                     startMonth = 0;
                     startYear++;
                 }
+                startCal.set(Calendar.MONTH, startMonth);
+                startCal.set(Calendar.YEAR, startYear);
             }
         } else {
             // 일 단위 데이터 추가
             while (!startCal.after(endCal)) {
                 int day = startCal.get(Calendar.DAY_OF_MONTH);
-                String date =  day + "일";
+                String date = day + "일";
+
+                Date currentDate = new Date(startCal.getTimeInMillis());
+
                 // 매출 DB 연동
-                dataset.addValue(1000, "매출", date);
+                List<PurchaseDTO> list = sql.getSalesStatus(currentDate, currentDate);
+                int dailySales = 0;
+                for (PurchaseDTO dto : list) {
+                    dailySales += dto.getPRICE() * dto.getPURCHASE_QTY();
+                }
+                dataset.addValue(dailySales, "매출", date);
                 
                 startCal.add(Calendar.DAY_OF_MONTH, 1);
             }

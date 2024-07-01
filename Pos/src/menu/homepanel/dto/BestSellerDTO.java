@@ -1,45 +1,23 @@
-package menu.salestatus.dto;
+package menu.homepanel.dto;
 
 import java.sql.Date;
 
-public class PurchaseDTO {
-	String BOOK_ISBN;	
-	String BOOK_TITLE;	
-	String BOOK_CONTENT;	
-	String PUBLISHER;	
-	String AUTHOR;	
-	Integer PRICE;	
+public class BestSellerDTO {
+	String BOOK_ISBN;
+	String BOOK_TITLE;
+	String BOOK_CONTENT;
+	String PUBLISHER;
+	String AUTHOR;
+	Integer PRICE;
 	Date ISSUE_DATE;
-	String THUMBNAIL;
 	String CATEGORY;
+	Integer ORDER_YN;
+	String THUMBNAIL;
 	Integer PURCHASE_ID;
 	Integer PURCHASE_QTY;
 	Date PURCHASE_DATE;
 	Integer PURCHASE_STATUS;
 	String MEMBER_ID;
-	Integer POINT_ID;
-	Integer USE_POINT;
-	Date USE_DATE;
-	
-	
-	public Integer getPOINT_ID() {
-		return POINT_ID;
-	}
-	public void setPOINT_ID(Integer pOINT_ID) {
-		POINT_ID = pOINT_ID;
-	}
-	public Integer getUSE_POINT() {
-		return USE_POINT;
-	}
-	public void setUSE_POINT(Integer uSE_POINT) {
-		USE_POINT = uSE_POINT;
-	}
-	public Date getUSE_DATE() {
-		return USE_DATE;
-	}
-	public void setUSE_DATE(Date uSE_DATE) {
-		USE_DATE = uSE_DATE;
-	}
 	public String getBOOK_ISBN() {
 		return BOOK_ISBN;
 	}
@@ -79,20 +57,26 @@ public class PurchaseDTO {
 	public Date getISSUE_DATE() {
 		return ISSUE_DATE;
 	}
-	public void setISSUE_DATE(Date date) {
-		ISSUE_DATE = date;
-	}
-	public String getTHUMBNAIL() {
-		return THUMBNAIL;
-	}
-	public void setTHUMBNAIL(String tHUMBNAIL) {
-		THUMBNAIL = tHUMBNAIL;
+	public void setISSUE_DATE(Date iSSUE_DATE) {
+		ISSUE_DATE = iSSUE_DATE;
 	}
 	public String getCATEGORY() {
 		return CATEGORY;
 	}
 	public void setCATEGORY(String cATEGORY) {
 		CATEGORY = cATEGORY;
+	}
+	public Integer getORDER_YN() {
+		return ORDER_YN;
+	}
+	public void setORDER_YN(Integer oRDER_YN) {
+		ORDER_YN = oRDER_YN;
+	}
+	public String getTHUMBNAIL() {
+		return THUMBNAIL;
+	}
+	public void setTHUMBNAIL(String tHUMBNAIL) {
+		THUMBNAIL = tHUMBNAIL;
 	}
 	public Integer getPURCHASE_ID() {
 		return PURCHASE_ID;
@@ -124,7 +108,4 @@ public class PurchaseDTO {
 	public void setMEMBER_ID(String mEMBER_ID) {
 		MEMBER_ID = mEMBER_ID;
 	}
-
-	
 }
-

@@ -23,42 +23,15 @@ public class TableTool {
 						   {"4","이클립스","2개","10%","15500원"},
 						   {"4","이클립스","2개","10%","15500원"},
 						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
-						   {"4","이클립스","2개","10%","15500원"},
+						   {"4","이클립스","2개","10%","15500원"},						   
 						   {"4","이클립스","2개","10%","15500원"}
 		};
 		String column[] = {"구매번호", "품목명", "수량", "할인", "가격"};
+		Font font = new Font("맑은 돋음", Font.BOLD, 20);
 		DefaultTableModel model = new DefaultTableModel(data, column);
 		JTable info = new JTable(model);
+		
+		info.setFont(font);
 		info.setRowHeight(60);
 		
 		DefaultTableCellRenderer columnRenderer = new DefaultTableCellRenderer() {
@@ -68,10 +41,13 @@ public class TableTool {
        // 선택된 셀의 배경색 설정
                 if (isSelected) {
                     cell.setBackground(Color.BLUE);
-                    cell.setForeground(Color.WHITE);
+                    cell.setForeground(new Color(22, 40, 80));
                 } else {
-                    cell.setForeground(Color.BLACK);
+                    cell.setForeground(new Color(22, 40, 80));
+                    
                 }
+                cell.setFont(font);
+                setHorizontalAlignment(JLabel.CENTER); // 중앙 정렬
 
                 return cell;
             }
@@ -85,7 +61,7 @@ public class TableTool {
                 JLabel headerLabel = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 headerLabel.setBackground(new Color(22, 40, 80)); // 헤더 배경색
                 headerLabel.setForeground(Color.WHITE); // 헤더 글자색
-                headerLabel.setFont(new Font("돋음", Font.BOLD, 20)); // 헤더 폰트 설정
+                headerLabel.setFont(new Font("맑은 돋음", Font.BOLD, 20)); // 헤더 폰트 설정
                 headerLabel.setHorizontalAlignment(JLabel.CENTER); // 중앙 정렬
                 return headerLabel;
             }

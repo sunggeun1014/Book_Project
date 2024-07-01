@@ -57,23 +57,12 @@ public class Datetoolbar extends JPanel {
         endDatePanel.setBounds(0,25,500,30);
         endDatePicker.setBounds(0,25,500,26);
         
-        endDatePicker.addActionListener(e -> {
-            handleSubmit(startDatePicker, endDatePicker);
-        });
+
   
         panel.add(startDatePicker);
         panel.add(endDatePicker);
 	}
 	
-	 public void handleSubmit(JDatePickerImpl startDatePicker, JDatePickerImpl endDatePicker) {
-	    SimpleDateFormat dateFormat = new SimpleDateFormat("\tyyyy-MM-dd");
-	    Date startDate = (Date) startDatePicker.getModel().getValue();
-	    Date endDate = (Date) endDatePicker.getModel().getValue();
-
-	    if (startDate != null && endDate != null) {
-	       CategoryDataset dataset = SalesChart.createDataset(startDate, endDate);
-	    }   
-	 }
 	 public JDatePickerImpl getStartDatePicker() {
 	    	return startDatePicker;
 	    }

@@ -1,6 +1,5 @@
 package menu.homepanel;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Dimension;
@@ -16,12 +15,14 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
@@ -170,15 +171,16 @@ public class ScheduleCalendar {
 		
         		
 		panel.setOpaque(false);
-		panel.setPreferredSize(new Dimension(400, 60));
-	    panel.setMaximumSize(new Dimension(400, 60)); // Ensure fixed height
+		panel.setPreferredSize(new Dimension(360, 60));
+	    panel.setMaximumSize(new Dimension(360, 60)); 
 		panel.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.LIGHT_GRAY));
 		panel.setLayout(new GridBagLayout());
-		Font font = new Font("맑은 고딕", Font.BOLD, 20);
+		Font font = new Font("맑은 고딕", Font.BOLD, 15);
 		
 		JLabel label = new JLabel(" 오늘의 일정");
 		label.setFont(font);
 		label.setSize(280, 50);
+		label.setForeground(new Color(22, 40, 80));
 		label.setLocation(20, 05);
 		
 		gbc.gridx = 0;
@@ -188,37 +190,122 @@ public class ScheduleCalendar {
         gbc.weighty = 2;
 		panel.add(label,gbc);
 		
-		
-		JLabel deleteButton = new JLabel();
-		deleteButton = u.getRoundShapeLabel(50, 50);
-		deleteButton.setText("+");
-		deleteButton.setHorizontalAlignment(JLabel.CENTER);
-		deleteButton.setFont(font);
-		
-		deleteButton.setBackground(Color.WHITE);
-		deleteButton.setForeground(new Color(22,40,80));
-		deleteButton.setSize(50,50);
-		deleteButton.setLocation(320,05);
-		
 		panel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				JFrame pop = new JFrame();
-				Utility u = new Utility();
-				u.popup("새창",pop,false);
-				pop.setVisible(true);
-				pop.setSize(200,200);
+				JDialog note = new JDialog();
+				
+				JPanel backgroundPanel = new JPanel();
+				backgroundPanel.setLayout(null);
+				
+				// 상단 JTextField
+				Font font = new Font("맑은 고딕", Font.BOLD, 15);
+				
+				JPanel titleTextFieldBack = new JPanel();
+				titleTextFieldBack.setLayout(null);
+				titleTextFieldBack.setSize(400,80);
+				titleTextFieldBack.setLocation(0,0);
+				titleTextFieldBack.setBackground(backgroundPanel.getBackground());
+                JTextField titleTextField = new JTextField();
+                titleTextField.setBackground(backgroundPanel.getBackground());
+                titleTextField.setFont(font);
+                titleTextField.setForeground(new Color(22, 40, 80));
+                titleTextField.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(22, 40, 80)));
+                titleTextField.setSize(350,60);
+                titleTextField.setLocation(25,15);   
+                titleTextField.addFocusListener(new FocusListener() {
+                    @Override
+                    public void focusGained(FocusEvent e) {
+                        if (titleTextField.getText().equals("제목을 입력하세요")) {
+                            titleTextField.setText("");
+                            titleTextField.setForeground(new Color(22, 40, 80));
+                        }
+                    }
+
+                    @Override
+                    public void focusLost(FocusEvent e) {
+                        if (titleTextField.getText().isEmpty()) {
+                            titleTextField.setText("제목을 입력하세요");
+                            titleTextField.setForeground(new Color(22, 40, 80));
+                        }
+                    }
+                });
+                titleTextFieldBack.add(titleTextField);
+                
+                // 중단 JTextArea
+				Font font2 = new Font("맑은 고딕", Font.BOLD, 25);
+
+                JPanel textAreaBack = new JPanel();
+                textAreaBack.setLayout(null);
+                textAreaBack.setSize(400,500);
+                textAreaBack.setLocation(0,85);
+                textAreaBack.setBackground(backgroundPanel.getBackground());
+                JTextArea textArea = new JTextArea();
+                textArea.setBackground(backgroundPanel.getBackground());
+                textArea.setFont(font2);
+                textArea.setForeground(new Color(22, 40, 80));
+                textArea.setSize(350,470);
+                textArea.setLocation(25,15);
+                textArea.setLineWrap(true);
+                textArea.setWrapStyleWord(true);
+                textArea.addFocusListener(new FocusListener() {
+                    @Override
+                    public void focusGained(FocusEvent e) {
+                        if (textArea.getText().equals("내용을 입력하세요")) {
+                            textArea.setText("");
+                            textArea.setForeground(new Color(22, 40, 80));
+                        }
+                        
+                    }
+
+                    @Override
+                    public void focusLost(FocusEvent e) {
+                        if (textArea.getText().isEmpty()) {
+                            textArea.setText("내용을 입력하세요");
+                            textArea.setForeground(new Color(22, 40, 80));
+                        }
+                    }
+                });
+                textAreaBack.add(textArea);
+                
+				Font buttonFont = new Font("맑은 고딕", Font.BOLD, 20);
+                
+                ButtonTool delete = ButtonTool.createButton("삭제하기", new Color(22, 40, 80), Color.WHITE, new Color(79, 163, 252), new Font("돋음", Font.BOLD, 18), 50, 50, true);
+                delete.setFont(buttonFont);
+                delete.setSize(300,50);
+                delete.setLocation(50,650);
+                ButtonTool modify = ButtonTool.createButton("수정하기", new Color(22, 40, 80), Color.WHITE, new Color(79, 163, 252), new Font("돋음", Font.BOLD, 18), 50, 50, true);
+                modify.setFont(buttonFont);
+                modify.setSize(300,50);
+                modify.setLocation(50,710);
+
+                backgroundPanel.add(titleTextFieldBack);
+                backgroundPanel.add(textAreaBack);
+                backgroundPanel.add(delete);
+                backgroundPanel.add(modify);
+
+                note.setSize(dialog.getSize());
+                note.setLocation(dialog.getLocation());
+                note.add(backgroundPanel);
+				note.setResizable(true);
+				
+				JPanel dummyPanel = new JPanel();
+                dummyPanel.setVisible(false);
+                backgroundPanel.add(dummyPanel);
+
+                note.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowOpened(java.awt.event.WindowEvent e) {
+                        dummyPanel.requestFocusInWindow();
+                    }
+                });
+				
+		        note.setVisible(true);
+				
 			}
 		});
 		
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.weightx = 0.09; // 가로 공간 비율
-        gbc.weighty = 0.09;
-		panel.add(deleteButton,gbc);
-//		panel.add(deleteButton);
-//		panel.add(label);
+		
 		contentArea.add(panel);
 		contentArea.revalidate();
 	    contentArea.repaint();
