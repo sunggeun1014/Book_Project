@@ -24,8 +24,10 @@ import frame_utility.BackgroundTooll;
 import frame_utility.ButtonTool;
 
 public class Pos_Login {
+	JFrame frame;
+
 	public Pos_Login() {
-		JFrame frame = new JFrame(); // JFrame 생성
+		frame = new JFrame(); // JFrame 생성
 		frame.setFocusable(true);
 		// 배경 이미지 세팅
 		BackgroundTooll background = new BackgroundTooll("images/menu_Login.png");
@@ -99,7 +101,6 @@ public class Pos_Login {
 		login.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent e) {
 				loginCheck(login, userId, userPassword);
-
 			};
 		});
 
@@ -121,10 +122,11 @@ public class Pos_Login {
 			PosFrame pos = new PosFrame();
 			pos.getButton(0).setBackground(new Color(79, 163, 252));
 			pos.getFrame().setVisible(true);
-
+			frame.dispose();
 			// 여기서 로그인 성공 후 다음 화면으로 전환하는 코드를 추가.
 		} else {
 			JOptionPane.showMessageDialog(null, "로그인 실패. 다시 시도하세요.");
+			userId.requestFocus();
 		}
 
 	}
