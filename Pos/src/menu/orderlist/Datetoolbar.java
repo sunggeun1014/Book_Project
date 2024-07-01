@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Properties;
 
 import javax.swing.JButton;
@@ -16,15 +15,20 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+import menu.Pos_OrderList;
+
 public class Datetoolbar extends JPanel {
 
     private JDatePickerImpl startDatePicker;
     private JDatePickerImpl endDatePicker;
-    private OrderDataFetcher orderDataFetcher;
+    private Pos_OrderList orderList;
 
     public Datetoolbar() {
-        this.orderDataFetcher = new OrderDataFetcher();
         createDatetoolbar(this);
+    }
+    
+    public void setOrderList(Pos_OrderList orderList) {
+        this.orderList = orderList;
     }
 
     public void createDatetoolbar(JPanel panel) {
@@ -36,9 +40,9 @@ public class Datetoolbar extends JPanel {
         p.put("text.month", "Month");
         p.put("text.year", "Year");
 
-        // 시작날짜 선택
+        // 시작 날짜 선택
         JDatePanelImpl startDatePanel = new JDatePanelImpl(startModel, p);
-        startDatePicker = new JDatePickerImpl(startDatePanel, new DateLabelFormatter());
+        startDatePicker = new JDatePickerImpl(startDatePanel, new DateLabelFormatter("\tyyyy-MM-dd(E)", "\t시작날짜를 선택해 주세요."));
         customizeDatePickerButton(startDatePicker, "▼");
         setComponentSize(startDatePicker, 350, 25);
         setComponentColors(startDatePanel, startDatePicker, Color.WHITE, Color.BLACK);
@@ -49,7 +53,7 @@ public class Datetoolbar extends JPanel {
         // 끝나는 날짜 선택
         UtilDateModel endModel = new UtilDateModel();
         JDatePanelImpl endDatePanel = new JDatePanelImpl(endModel, p);
-        endDatePicker = new JDatePickerImpl(endDatePanel, new DateLabelFormatter());
+        endDatePicker = new JDatePickerImpl(endDatePanel, new DateLabelFormatter("\tyyyy-MM-dd(E)", "\t종료날짜를 선택해 주세요."));
         customizeDatePickerButton(endDatePicker, "▼");
         setComponentSize(endDatePicker, 350, 25);
         setComponentColors(endDatePanel, endDatePicker, Color.WHITE, Color.BLACK);
@@ -64,22 +68,45 @@ public class Datetoolbar extends JPanel {
         panel.add(startDatePicker);
         panel.add(endDatePicker);
     }
-
-    public void handleSubmit(JDatePickerImpl startDatePicker, JDatePickerImpl endDatePicker) {
-        Date startDate = (Date) startDatePicker.getModel().getValue();
-        Date endDate = (Date) endDatePicker.getModel().getValue();
-
-        if (startDate != null && endDate != null) {
-            Object[][] data = orderDataFetcher.orderDataFetcher(startDate, endDate);
+    
+    public void clearDateSelection() {
+        startDatePicker.getModel().setValue(null);
+        endDatePicker.getModel().setValue(null);
+        
+        if (orderList != null) {
+            orderList.refreshOrderList();
         }
     }
     
-    public JDatePickerImpl getStartDatePicker() {
-        return startDatePicker;
-    }
+    public void handleSubmit(JDatePickerImpl startDatePicker, JDatePickerImpl endDatePicker) {
+        java.util.Date startDateUtil = (java.util.Date) startDatePicker.getModel().getValue();
+        java.util.Date endDateUtil = (java.util.Date) endDatePicker.getModel().getValue();
 
-    public JDatePickerImpl getEndDatePicker() {
-        return endDatePicker;
+       
+        if (startDateUtil != null && endDateUtil != null) {
+            // 시간을 00:00:00으로 설정한 Calendar 객체 생성
+            Calendar startCalendar = Calendar.getInstance();
+            startCalendar.setTime(startDateUtil);
+            startCalendar.set(Calendar.HOUR_OF_DAY, 0);
+            startCalendar.set(Calendar.MINUTE, 0);
+            startCalendar.set(Calendar.SECOND, 0);
+            startCalendar.set(Calendar.MILLISECOND, 0);
+
+            Calendar endCalendar = Calendar.getInstance();
+            endCalendar.setTime(endDateUtil);
+            endCalendar.set(Calendar.HOUR_OF_DAY, 0);
+            endCalendar.set(Calendar.MINUTE, 0);
+            endCalendar.set(Calendar.SECOND, 0);
+            endCalendar.set(Calendar.MILLISECOND, 0);
+
+            // java.sql.Date로 변환
+            java.sql.Date startDate = new java.sql.Date(startCalendar.getTimeInMillis());
+            java.sql.Date endDate = new java.sql.Date(endCalendar.getTimeInMillis());
+
+            orderList.updateOrderList(startDate, endDate);
+        } else {
+        	orderList.refreshOrderList();
+        }
     }
 
     private void setComponentSize(JDatePickerImpl datePicker, int width, int height) {
@@ -101,25 +128,5 @@ public class Datetoolbar extends JPanel {
 
         button.setMinimumSize(new java.awt.Dimension(50, button.getPreferredSize().height));
         button.setPreferredSize(new java.awt.Dimension(50, button.getPreferredSize().height));
-    }
-
-    class DateLabelFormatter extends AbstractFormatter {
-
-        private String datePattern = "\t yyyy-MM-dd(E)";
-        private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
-
-        @Override
-        public Object stringToValue(String text) throws ParseException {
-            return dateFormatter.parseObject(text);
-        }
-
-        @Override
-        public String valueToString(Object value) throws ParseException {
-            if (value != null) {
-                Calendar cal = (Calendar) value;
-                return dateFormatter.format(cal.getTime());
-            }
-            return "\t날짜를 선택해 주세요.";
-        }
     }
 }
