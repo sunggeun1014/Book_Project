@@ -53,7 +53,7 @@ public class PaymentDialog {
         JLabel priceLabel = new JLabel(price + "원");
         priceLabel.setFont(font2);
         priceLabel.setForeground(Color.RED);
-        priceLabel.setBounds(100, 75, 100, 30); // 가운데 정렬 수정
+        priceLabel.setBounds(100, 75, 150, 30); // 가운데 정렬 수정
         cashPaymentScreen.add(priceLabel);
 
         JLabel cashPaymentLabel = new JLabel("현금 결제");
@@ -164,7 +164,7 @@ public class PaymentDialog {
         JLabel priceLabel = new JLabel(price + "원");
         priceLabel.setFont(font2);
         priceLabel.setForeground(Color.RED);
-        priceLabel.setBounds(100, 75, 100, 30); // 가운데 정렬 수정
+        priceLabel.setBounds(100, 75, 150, 30); // 가운데 정렬 수정
         cardPaymentScreen.add(priceLabel);
 
         JLabel cashPaymentLabel = new JLabel("카드 결제");
@@ -243,7 +243,7 @@ public class PaymentDialog {
         JLabel priceLabel = new JLabel(price + "원");
         priceLabel.setFont(font2);
         priceLabel.setForeground(Color.RED);
-        priceLabel.setBounds(100, 75, 100, 30); // 가운데 정렬 수정
+        priceLabel.setBounds(100, 75, 150, 30); // 가운데 정렬 수정
         cashPaymentScreen.add(priceLabel);
 
         JLabel cashPaymentLabel = new JLabel("현금 결제");

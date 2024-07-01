@@ -15,7 +15,7 @@ public class PaymentQuery {
 	public List<PaymentDTO> getPurchaseList() {
 		List<PaymentDTO> list = new ArrayList<>();
 		
-		String sql = "select book_info.book_title, book_info.price, book_info.author, book_info.publisher from book_info left join book_order using (book_isbn)";
+		String sql = "select * from book_info";
 		try (
 			Connection conn = new DBConnector().getConnection();	
 			PreparedStatement ps = conn.prepareStatement(sql);
