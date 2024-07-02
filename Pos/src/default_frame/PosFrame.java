@@ -26,18 +26,19 @@ import menu.Pos_Payment;
 import menu.Pos_SaleStatus;
 
 public class PosFrame {
-	
-	static int screenWidth = 1440;
-	static int screenHight = 1024;
-	
-	private static JFrame frame;
-	private static JPanel[] buttons = new JPanel[7];
-	private static JPanel cardPanel;
-	private CardLayout cardLayout;
-	
-	
-	public PosFrame() {
-		frame = new JFrame("POS");
+    
+    static int screenWidth = 1440;
+    static int screenHight = 1024;
+    
+    private static JFrame frame;
+    private static JPanel[] buttons = new JPanel[7];
+    private static JPanel cardPanel;
+    private CardLayout cardLayout;
+    
+    private static Pos_SaleStatus posSaleStatusPanel; // Pos_SaleStatus 패널 변수 추가
+
+    public PosFrame() {
+        frame = new JFrame("POS");
 
         String mainImagePath = "images/main_frame.png";
         String logoImagePath = "images/icon/mainLogo.png";
@@ -60,14 +61,13 @@ public class PosFrame {
         logoLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-            	logoLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                logoLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-            	logoLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                logoLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
-            
         });
         
         buttons[0] = Addbutton("홈", "images/icon/menuHome.png", 30, 200, "homePanel");
@@ -79,7 +79,7 @@ public class PosFrame {
         buttons[6] = Addbutton("계산하기", "images/icon/menuMember.png", 30, 560, "paymentPanel");
         
         for (JPanel button : buttons) {
-        	backgroundPanel.add(button);
+            backgroundPanel.add(button);
         }
         backgroundPanel.setLayout(null);
         backgroundPanel.add(logoLabel);
@@ -92,7 +92,10 @@ public class PosFrame {
         // 각 패널을 각페널에 띄우고 싶은 화면 구조를 만들어서 넣어주면 된다.
         cardPanel.add(new Pos_HomePanel().createHomePanel(), "homePanel");
         cardPanel.add(new Pos_MemberManagement().creatMemberManagement(), "memberPanel");
-        cardPanel.add(new Pos_SaleStatus().createSaleStatus(), "salesPanel");
+
+        posSaleStatusPanel = new Pos_SaleStatus(); // Pos_SaleStatus 인스턴스 생성
+        cardPanel.add(posSaleStatusPanel.createSaleStatus(), "salesPanel");
+
         cardPanel.add(new Pos_OrderList().createOrderList(), "orderPanel");
         cardPanel.add(new Pos_InventoryList().creatInventoryList(), "arrivalPanel");
         cardPanel.add(new Pos_BookManagement().createBookManagement(), "bookPanel");
@@ -106,14 +109,13 @@ public class PosFrame {
         frame.setSize(screenWidth, screenHight);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
-	}
-	
-	
-	private static JPanel Addbutton(String name, String path, int x, int y, String panelName) {
-		JPanel button = new JPanel() {
-        	@Override
-        	protected void paintComponent(Graphics g) {
-        		Graphics2D g2 = (Graphics2D) g.create();
+    }
+    
+    private static JPanel Addbutton(String name, String path, int x, int y, String panelName) {
+        JPanel button = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
                 int width = getWidth();
@@ -125,7 +127,7 @@ public class PosFrame {
                 super.paintComponent(g);
                 
                 g2.dispose();
-        	}
+            }
         };
         
         button.setLayout(null);
@@ -145,58 +147,54 @@ public class PosFrame {
         button.setSize(220, 40);
         button.setLocation(x, y);
         button.setOpaque(false);
-       
         
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-            	button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                button.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-            	button.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                button.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
-            
-            @Override
-            public void mouseClicked(MouseEvent e) {
-            	buttonChangeColor(button);
-            	 CardLayout cl = (CardLayout) (cardPanel.getLayout());
-                 cl.show(cardPanel, panelName);
-            }
+                        
             @Override
             public void mouseReleased(MouseEvent e) {
-            	buttonChangeColor(button);
-           	 CardLayout cl = (CardLayout) (cardPanel.getLayout());
+                buttonChangeColor(button);
+                CardLayout cl = (CardLayout) (cardPanel.getLayout());
                 cl.show(cardPanel, panelName);
+
+                if (panelName.equals("salesPanel")) {
+                    posSaleStatusPanel.updateDetailInfo(0, posSaleStatusPanel.getDetailInfoPanel());
+                }
             }
         });
         
-		return button;
-	}
-	
-	private static void buttonChangeColor(JPanel button) {
-		button.setBackground(new Color(79, 163, 252));
-		for(JPanel btn : buttons) {
-			if(btn.hashCode() != button.hashCode()) {
-				btn.setBackground(new Color(22, 40, 80));
-			}
-		}
-	}
-	
-	// 색상으로 패널을 생성하는 헬퍼 메소드
+        return button;
+    }
+    
+    private static void buttonChangeColor(JPanel button) {
+        button.setBackground(new Color(79, 163, 252));
+        for(JPanel btn : buttons) {
+            if(btn.hashCode() != button.hashCode()) {
+                btn.setBackground(new Color(22, 40, 80));
+            }
+        }
+    }
+    
+    // 색상으로 패널을 생성하는 헬퍼 메소드
     private JPanel createPanel(Color color) {
         JPanel panel = new JPanel();
         panel.setBackground(color);
         return panel;
     }
-	
-	public JFrame getFrame() {
-		return frame;
-	}
-	
-	public JPanel getButton(int index) {
-		return buttons[index]; 
-	}
-	
+    
+    public JFrame getFrame() {
+        return frame;
+    }
+    
+    public JPanel getButton(int index) {
+        return buttons[index]; 
+    }
 }

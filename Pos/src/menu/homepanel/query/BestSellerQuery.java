@@ -16,8 +16,7 @@ public class BestSellerQuery {
 	public List<BestSellerDTO> getBestSellerList() {
 		List<BestSellerDTO> list = new ArrayList<>();
 		
-		String sql = "select * from book_order inner join book_purchase using(book_isbn) "
-				+ "order by purchase_qty desc";
+		String sql = "select * from book_info inner join book_purchase using(book_isbn) order by purchase_qty desc";
 		try (
 			Connection conn = new DBConnector().getConnection();	
 			PreparedStatement ps = conn.prepareStatement(sql);
@@ -27,22 +26,20 @@ public class BestSellerQuery {
 			) {
 				while(rs.next()) {
 					BestSellerDTO dto = new BestSellerDTO();
-					
-					dto.setBOOK_ISBN(rs.getString("BOOK_ISBN"));
-					dto.setBOOK_TITLE(rs.getString("BOOK_TITLE"));
-					dto.setBOOK_CONTENT(rs.getString("BOOK_CONTENT"));
-					dto.setPUBLISHER(rs.getString("PUBLISHER"));
-					dto.setAUTHOR(rs.getString("AUTHOR"));
-					dto.setPRICE(rs.getInt("PRICE"));
-					dto.setISSUE_DATE(rs.getDate("ISSUE_DATE"));
-					dto.setCATEGORY(rs.getString("CATEGORY"));
-					dto.setORDER_YN(rs.getInt("ORDER_YN"));
-					dto.setTHUMBNAIL(rs.getString("THUMBNAIL"));
-					dto.setPURCHASE_ID(rs.getInt("PURCHASE_ID"));
-					dto.setPURCHASE_QTY(rs.getInt("PURCHASE_QTY"));
-					dto.setPURCHASE_DATE(rs.getDate("PURCHASE_DATE"));
-					dto.setPURCHASE_STATUS(rs.getInt("PURCHASE_STATUS"));
-					dto.setMEMBER_ID(rs.getString("MEMBER_ID"));
+					dto.setAuthor(rs.getString("AUTHOR"));
+					dto.setBookContent(rs.getString("BOOK_CONTENT"));
+					dto.setBookIsbn(rs.getString("BOOK_ISBN"));
+					dto.setBookTitle(rs.getString("BOOK_TITLE"));
+					dto.setCategory(rs.getString("CATEGORY"));
+					dto.setIssueDate(rs.getDate("ISSUE_DATE"));
+					dto.setMemberID(rs.getString("MEMBER_ID"));
+					dto.setPrice(rs.getInt("PRICE"));
+					dto.setPublisher(rs.getString("PUBLISHER"));
+					dto.setPurchaseDATE(rs.getDate("PURCHASE_DATE"));
+					dto.setPurchaseID(rs.getInt("PURCHASE_ID"));
+					dto.setPurchaseQTY(rs.getInt("PURCHASE_QTY"));
+					dto.setPurchaseStatus(rs.getInt("PURCHASE_STATUS"));
+					dto.setThumbnail(rs.getString("THUMBNAIL"));
 					
 					list.add(dto);
 				}

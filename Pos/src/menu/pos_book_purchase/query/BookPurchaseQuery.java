@@ -15,7 +15,7 @@ public class BookPurchaseQuery {
 	public List<BookPurchaseDTO> getPurchaseList(String id) {
 		List<BookPurchaseDTO> list = new ArrayList<>();
 		
-		String sql = "select * from book_purchase inner join book_info using(book_isbn) where member_id = ?";
+		String sql = "select * from book_purchase inner join book_info using(book_isbn) where member_id = ? order by PURCHASE_DATE desc";
 		try (
 			Connection conn = new DBConnector().getConnection();	
 			PreparedStatement ps = conn.prepareStatement(sql);

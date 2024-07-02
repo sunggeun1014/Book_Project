@@ -125,9 +125,9 @@ public class Pos_HomePanel {
         int imgSize = 200;
         int num = 0;
         for(BestSellerDTO dto : bestSellerList) {
-        	thumbnail = dto.getTHUMBNAIL();
-        	title = dto.getBOOK_TITLE();
-        	category = dto.getCATEGORY();
+        	thumbnail = dto.getThumbnail();
+        	title = dto.getBookTitle();
+        	category = dto.getCategory();
         	
         	ImageIcon icon = new ImageIcon("images/thumbnail/"+ thumbnail);
         	Image img = icon.getImage();

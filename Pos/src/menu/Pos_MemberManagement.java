@@ -19,6 +19,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -40,7 +41,7 @@ public class Pos_MemberManagement {
 	private Utility u = new Utility();
 	private MembersQuery member = new MembersQuery();
 	private BookPurchaseQuery purchase = new BookPurchaseQuery();
-	private JFrame popup;
+	private JDialog popup;
 	
 	public JPanel creatMemberManagement() {
 		JPanel panel = new JPanel();
@@ -258,7 +259,7 @@ public class Pos_MemberManagement {
             
             @Override
             public void mouseReleased(MouseEvent e) {
-            	popup = setJFrameOption(new JFrame(), 1000, 500);
+            	popup = setJFrameOption(new JDialog(), 1000, 500);
             	addMemberModifyJPanel(popup, label.getClientProperty("hiddenText").toString());
         		
             	popup.setVisible(true);
@@ -266,7 +267,7 @@ public class Pos_MemberManagement {
         });
 	}
 	
-	private JFrame setJFrameOption(JFrame frame, int width, int height) {
+	private JDialog setJFrameOption(JDialog frame, int width, int height) {
 		frame.setUndecorated(false);
 		frame.setSize(width, height);
 		frame.setLayout(null);
@@ -277,15 +278,15 @@ public class Pos_MemberManagement {
     	return frame;
 	}
 	
-	private JFrame addMemberModifyJPanel(JFrame frame, String id) {
+	private JDialog addMemberModifyJPanel(JDialog frame, String id) {
 		JLabel[] headers = new JLabel[2];
 		List<MemberPurchaseDTO> purchaseList = member.getMemberPurchaseList(id);
 		
 		headers[0] = new JLabel(id + " 고객님의");
 		headers[1] = new JLabel("구매내역 (" + purchaseList.size() + "건)");
 		
-		headers[0].setBounds(40, 50, 350, 30);
-		headers[1].setBounds(40, 80, 350, 40);
+		headers[0].setBounds(40, 20, 350, 30);
+		headers[1].setBounds(40, 50, 350, 40);
 		
 		headers[0].setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		headers[1].setFont(new Font("맑은 고딕", Font.BOLD, 22));
@@ -296,7 +297,7 @@ public class Pos_MemberManagement {
 		
 		JTextField[] info = new JTextField[6];
 		
-		int height = 150;
+		int height = 120;
 		for(int i = 0; i < info.length; i++) {
 			JPanel panel = u.getRoundShape(14, 14);
 			info[i] = new JTextField();
@@ -334,7 +335,6 @@ public class Pos_MemberManagement {
 		
 		info[0].setEditable(false);
 		info[2].setEditable(false);
-		info[4].setEditable(false);
 		info[1].setForeground(new Color(197, 197, 197));
 		
 		
@@ -351,7 +351,7 @@ public class Pos_MemberManagement {
 		button.setFont(new Font("맑은 고딕", Font.BOLD, 20));
 		button.setForeground(new Color(0, 135, 103));
 		button.setSize(450, 35);
-		button.setLocation(40, 395);
+		button.setLocation(40, 365);
 		
 		button.addMouseListener(new MouseAdapter() {
             @Override
@@ -376,11 +376,10 @@ public class Pos_MemberManagement {
             		dto.setDetailedAddress(info[5].getText());
             		
             		int result = member.memberModify(dto);
-            		
             		if(result != 0) {
-            			popup.dispose();
+            			u.popup("수정이 완료되었습니다.", popup, true);
             		} else {
-            			
+            			u.popup("입력이 잘못되었습니다.", popup, false);
             		}
             	}
             }
@@ -422,19 +421,19 @@ public class Pos_MemberManagement {
 	
 	private boolean memberValidation(JTextField[] field) {
 		if(field[1].getText() == null || field[1].getText().equals("") || field[1].getText().equals("비밀번호")) {
-			System.out.println("비밀번호를 입력해 주세요.");
+			u.popup("비밀번호를 입력해 주세요.", popup, false);
 			field[1].requestFocus();
 			return false;
 		} else if(field[1].getText().length() < 4 && field[1].getText().length() <= 30) {
-			System.out.println("비밀번호의 길이는 최소 5자 최대 30자 입니다.");
+			u.popup("비밀번호의 길이는 최소 5자 최대 30자 입니다.", popup, false);
 			field[1].requestFocus();
 			return false;
 		} else if(!u.isPhoneNumber(field[3].getText()) || field[3].getText().equals("") || field[3].getText() == null) {
-			System.out.println("비밀번호를 다시 입력해 주세요 ex) 010-0000-0000");
+			u.popup("<html><body>비밀번호를 다시 입력해 주세요.<br> ex) 010-0000-0000</body></html>", popup, false);
 			field[3].requestFocus();
 			return false;
-		} else if(field[4].getText().equals("") || field[3].getText() == null) {
-			System.out.println("주소를 입력해 주세요");
+		} else if(field[4].getText().equals("") || field[4].getText() == null || field[4].equals("주소")) {
+			u.popup("주소를 입력해 주세요.", popup, false);
 			field[4].requestFocus();
 			return false;
 		}
@@ -443,20 +442,19 @@ public class Pos_MemberManagement {
 		return true;
 	}
 	
-	private JPanel getPurchaseListPanel(List<BookPurchaseDTO> list) {
+	private JScrollPane getPurchaseListPanel(List<BookPurchaseDTO> list) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy. MM. dd. HH:mm");
 
 		JPanel panel = u.getRoundShape(14, 14);
 		
-		int height = 20;
-		int cnt = 0;
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		int height = 0;
 		for(BookPurchaseDTO dto : list) {
-			if(cnt++ == 1) break;
 			JPanel row = new JPanel();
 			
 			row.setLayout(null);
 			row.setBounds(20, height, 380, 120);
-			
+			row.setPreferredSize(new Dimension(380, 120));
 			
 			JLabel[] info = new JLabel[5];
 	        
@@ -469,30 +467,52 @@ public class Pos_MemberManagement {
 	            }
 	        };
 	        
-	        info[1] = new JLabel(sdf.format(dto.getPurchaseDate()));
+	        info[1] = new JLabel(sdf.format(dto.getPurchaseDate())  + "  결제");
 	        info[2] = new JLabel(dto.getBookTitle());
 	        info[3] = new JLabel("수량 " + dto.getPurchaseQty());
 			info[4] = new JLabel(u.priceFormat(dto.getPurchaseQty() * dto.getPrice()) + "원");
 
-	        
+			setPurchaseInfo(info);
+			
 			for(JLabel label : info) {
 				row.add(label);
 			}
 			
-			setPurchaseInfo(info);
-			
 			panel.add(row);
 			
-			height += 30;
+			height += 120;
 		}
 		
-		panel.setBounds(510, 150, 430, 280);
-		
-		return panel; 
+		JScrollPane scrollPane = new JScrollPane(panel);
+		scrollPane.setBorder(null);
+        scrollPane.setBounds(510, 120, 430, 280);
+        scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(5, 0));
+        scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = Color.GRAY;
+                this.trackColor = Color.LIGHT_GRAY;
+            }
+        });
+        
+        JScrollBar verticalScrollBar = scrollPane.getVerticalScrollBar();
+        verticalScrollBar.setUnitIncrement(16);
+        verticalScrollBar.setBlockIncrement(100);
+
+		return scrollPane; 
 	}
 	
 	private void setPurchaseInfo(JLabel[] info) {
-		info[0].setBounds(0, 0, 70, 70);
+		info[0].setBounds(30, 20, 90, 90);
+		info[1].setBounds(140, 25, 260, 20);
+		info[2].setBounds(140, 50, 260, 20);
+		info[3].setBounds(140, 85, 130, 25);
+		info[4].setBounds(270, 85, 130, 25);
+		
+		info[1].setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		info[2].setFont(new Font("맑은 고딕", Font.BOLD, 20));
+		info[3].setFont(new Font("맑은 고딕", Font.BOLD, 16));
+		info[4].setFont(new Font("맑은 고딕", Font.BOLD, 16));
 		
 	}
 }

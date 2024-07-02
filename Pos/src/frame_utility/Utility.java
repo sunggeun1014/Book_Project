@@ -1,10 +1,9 @@
 package frame_utility;
 
 import java.awt.Color;
-
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.FontMetrics;
-
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -19,7 +18,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
 import javax.swing.SwingConstants;
 
 
@@ -125,18 +123,17 @@ public class Utility {
 	    // 텍스트 너비 계산
 	    FontMetrics metrics = message.getFontMetrics(font);
 	    int textWidth = metrics.stringWidth(text);
-	    int textHeight = metrics.getHeight();
+	    int textHeight = 70;
 
 	    // 텍스트의 중앙 위치 계산
 	    int xText = (300 - textWidth) / 2;
-	    int yText = 50; // 고정된 Y 위치
+	    int yText = 25; // 고정된 Y 위치
 
 	    message.setBounds(xText, yText, textWidth, textHeight);
 
 	    // 버튼 라벨 생성
 	    Utility u = new Utility();
-	    JLabel button = new JLabel();
-	    button = u.getRoundShapeLabel(25, 25);
+	    JLabel button = u.getRoundShapeLabel(25, 25);
 	    button.setHorizontalAlignment(SwingConstants.CENTER);
 	    button.setText("확인");
 	    button.setFont(font);
@@ -146,7 +143,7 @@ public class Utility {
 
 	    // 버튼 너비 계산
 	    int buttonWidth = 150; // 약간의 패딩 추가
-	    int buttonHeight = metrics.getHeight();
+	    int buttonHeight = 30;
 
 	    // 버튼의 중앙 위치 계산
 	    int xButton = (300 - buttonWidth) / 2;
@@ -157,13 +154,23 @@ public class Utility {
 	    // 버튼에 마우스 리스너를 추가하여 두 프레임을 모두 닫음
 	    button.addMouseListener(new MouseAdapter() {
 	        @Override
+	        public void mouseEntered(MouseEvent e) {
+	            button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+	        }
+
+	        @Override
+	        public void mouseExited(MouseEvent e) {
+	            button.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+	        }
+
+	        @Override
 	        public void mouseClicked(MouseEvent e) {
-	        	if(option) {
-		            pop_upPage.dispose();
-		            frame.dispose();
-	        	}else {
-	        		pop_upPage.dispose();
-	        	}
+	            if (option) {
+	                pop_upPage.dispose();
+	                frame.dispose();
+	            } else {
+	                pop_upPage.dispose();
+	            }
 	        }
 	    });
 	    
@@ -179,7 +186,7 @@ public class Utility {
 		return pop_upPage;
 	}
 	
-	public JDialog popup(String text, JFrame frame, boolean option) {
+	public void popup(String text, JFrame frame, boolean option) {
 	    // 팝업 프레임 생성
 	    JDialog pop_upPage = new JDialog();
 	    pop_upPage.setLayout(null);
@@ -239,7 +246,6 @@ public class Utility {
 	        	}
 	        }
 	    });
-		return pop_upPage;
 	}
 	
 	public JTextField getRoundShapeTextField(int num1, int num2, Color color) {
