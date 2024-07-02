@@ -9,6 +9,11 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,13 +35,25 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 
+import db.DBConnector;
 import frame_utility.ButtonTool;
 import frame_utility.RoundPanelTool;
 import menu.payment.PaymentDialog;
-import menu.payment.dto.PaymentDTO;
+import menu.payment.dto.PaymentBookInfoDTO;
+import menu.payment.dto.PaymentPurchaseDTO;
 import menu.payment.query.PaymentQuery;
 
 public class Pos_Payment {
+	
+	private List<PaymentPurchaseDTO> purchaseDTOList = new ArrayList<>();
+	private JPanel listboard; // listboard를 멤버 변수로 선언
+	private AtomicInteger totalAmount = new AtomicInteger(0); // totalAmount 초기화
+	private Map<JPanel, String> panelToISBNMap = new HashMap<>(); // 패널과 ISBN 매핑
+
+	public List<PaymentPurchaseDTO> getPurchaseDTOList() {
+		return purchaseDTOList;
+	}
+
     public JPanel creatPayment() {
         JPanel paymentPanel = new JPanel();
         paymentPanel.setBackground(new Color(246, 247, 251));
@@ -64,10 +81,10 @@ public class Pos_Payment {
         minus.setBounds(460, 560, 70, 90);
         paymentPanel.add(minus);
 
-        ButtonTool qty = ButtonTool.createButton("적립", new Color(22, 40, 80), Color.WHITE, new Color(79, 163, 252), new Font("돋음", Font.BOLD, 25), 15, 15, true);
-        qty.setFont(font);
-        qty.setBounds(540, 560, 190, 90);
-        paymentPanel.add(qty);
+        ButtonTool pointSave = ButtonTool.createButton("적립", new Color(22, 40, 80), Color.WHITE, new Color(79, 163, 252), new Font("돋음", Font.BOLD, 25), 15, 15, true);
+        pointSave.setFont(font);
+        pointSave.setBounds(540, 560, 190, 90);
+        paymentPanel.add(pointSave);
 
         ButtonTool cash = ButtonTool.createButton("현금", new Color(106, 118, 147), Color.WHITE, new Color(79, 163, 252), new Font("돋음", Font.BOLD, 25), 15, 15, true);
         cash.setFont(font);
@@ -115,14 +132,14 @@ public class Pos_Payment {
         page1.setBounds(0, 0, 730, 550);
 
         // 테이블 헤더 및 데이터 정의
-        String[] columnNames = {"품목번호", "품목명", "출판사", "작가", "가격"};
+        String[] columnNames = {"책 고유번호", "품목명", "출판사", "작가", "가격"};
         
         PaymentQuery sql = new PaymentQuery();
-        List<PaymentDTO> bookInfo = sql.getPurchaseList();
+        List<PaymentBookInfoDTO> bookInfo = sql.getPurchaseList();
         Object[][] data = new Object[bookInfo.size()][5];
         int index = 0;
-        for(PaymentDTO dto : bookInfo) {
-        	data[index] = new Object[] {index+1,dto.getBook_title(),dto.getAUTHOR(),dto.getPUBLISHER(),dto.getPrice()+"원"};
+        for(PaymentBookInfoDTO dto : bookInfo) {
+        	data[index] = new Object[] {dto.getBook_isbn(),dto.getBook_title(),dto.getAUTHOR(),dto.getPUBLISHER(),dto.getPrice()+"원"};
         	index++;
         }
 
@@ -234,7 +251,7 @@ public class Pos_Payment {
         amountLabel.setBounds(290, 80, 100, 30);
         page2.add(amountLabel);
         
-        JPanel listboard = new JPanel();
+        listboard = new JPanel();
         listboard.setLayout(null);
         listboard.setBackground(Color.WHITE);
 
@@ -258,6 +275,7 @@ public class Pos_Payment {
 
         // 클릭된 행을 추적할 리스트와 각 행의 패널, JLabel 및 JLabel 맵을 저장
         List<Integer> clickedRows = new ArrayList<>();
+        List<PaymentPurchaseDTO> dtoList = new ArrayList<>();
         Map<Integer, JLabel> rowToQtyLabelMap = new HashMap<>();
         Map<Integer, JLabel> rowToPriceLabelMap = new HashMap<>();
         Map<JPanel, Integer> panelToRowMap = new HashMap<>();
@@ -293,11 +311,12 @@ public class Pos_Payment {
                 }
 
                 // 선택된 행에서 데이터 가져오기
-                String itemName = table.getValueAt(row, 1).toString();
+               //"책 고유번호", "품목명", "출판사", "작가", "가격"
+                String bookISBN = table.getValueAt(row, 0).toString();                
+                String bookTitle = table.getValueAt(row, 1).toString();                
                 String priceStr = table.getValueAt(row, 4).toString();
-                
                 int price = Integer.parseInt(priceStr.replaceAll("[^\\d.]", ""));
-
+                addItemToListboard(bookISBN, bookTitle, 1, price); // 리스트보드에 아이템 추가
                 if (!clickedRows.contains(row)) {
                     clickedRows.add(row);
                     
@@ -306,7 +325,7 @@ public class Pos_Payment {
                     productList.setBackground(Color.WHITE);
                     productList.setBounds(0, 40 * (clickedRows.size() - 1), 325, 40);
 
-                    JLabel productName = new JLabel(itemName);
+                    JLabel productName = new JLabel(bookTitle);
                     productName.setForeground(new Color(22, 40, 80));
                     productName.setBounds(20, 0, 100, 40);
                     productList.add(productName);
@@ -327,7 +346,7 @@ public class Pos_Payment {
                     listboard.add(productList);
                     listboard.revalidate();
                     listboard.repaint();
-
+       
                     // 선택 시 배경색 변경
                     productList.addMouseListener(new MouseAdapter() {
                         @Override
@@ -364,6 +383,14 @@ public class Pos_Payment {
                     productQTY.repaint();
                     productPrice.revalidate();
                     productPrice.repaint();
+                    
+                 // PaymentPurchaseDTO 객체의 수량 업데이트
+                    for (PaymentPurchaseDTO dto : purchaseDTOList) {
+                        if (dto.getBookISBN().equals(bookISBN)) {
+                            dto.setPurchaseQTY(dto.getPurchaseQTY() + 1);
+                            break;
+                        }
+                    }
                                           
                 }
 
@@ -385,7 +412,7 @@ public class Pos_Payment {
             }            
             
         });
-
+        
         allCancle.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -464,28 +491,33 @@ public class Pos_Payment {
         });
 
         
+
         cash.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseReleased(MouseEvent e) {
-        		JDialog cashScreen = new PaymentDialog().createCashDialog(String.valueOf(totalAmount));
-        		System.out.println(String.valueOf(amountTotalLabel.getText()));
-        	}
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                updateListboard();  // 결제 전에 listboard를 업데이트
+                PaymentDialog paymentDialog = new PaymentDialog(Pos_Payment.this);
+                JDialog cashScreen = paymentDialog.createCashDialog(String.valueOf(totalAmount.get()));
+            }
         });
         
         card.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseReleased(MouseEvent e) {
-        		JDialog cardScreen = new PaymentDialog().createCardDialog(String.valueOf(totalAmount),true);
+        		updateListboard();
+                PaymentDialog paymentDialog = new PaymentDialog(Pos_Payment.this);
+        		JDialog cardScreen = paymentDialog.createCardDialog(String.valueOf(totalAmount),true);
         		
         	}
         });
         
         split.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseReleased(MouseEvent e) {
-        		JDialog cardScreen = new PaymentDialog().createSplitDialog(String.valueOf(totalAmount));
-        		
-        	}
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                updateListboard();  // 결제 전에 listboard를 업데이트
+                PaymentDialog paymentDialog = new PaymentDialog(Pos_Payment.this);
+                JDialog splitScreen = paymentDialog.createSplitDialog(String.valueOf(totalAmount.get()));
+            }
         });
         
         plus.addMouseListener(new MouseAdapter() {
@@ -589,9 +621,15 @@ public class Pos_Payment {
                 page2.repaint();
             }
         });
-
-
         
+        pointSave.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                PaymentDialog paymentDialog = new PaymentDialog(Pos_Payment.this);
+                paymentDialog.createMemberInquiry();
+            }
+        });
+   
         // 점선 구분선 추가
         JPanel dottedLine1 = new JPanel();
         dottedLine1 = dottedLine(page2, 30, 115, 295, 2);
@@ -626,4 +664,92 @@ public class Pos_Payment {
         
         return dottedLinepanel;
     }
+    
+    private void addToPurchaseList(PaymentPurchaseDTO dto) {
+        purchaseDTOList.add(dto);
+    }
+
+    private void updateListboard() {
+        Map<String, PaymentPurchaseDTO> purchaseMap = new HashMap<>(); // ISBN을 키로 사용하는 Map
+
+        for (Component comp : listboard.getComponents()) {
+            if (comp instanceof JPanel) {
+                JPanel panel = (JPanel) comp;
+
+                String bookISBN = panelToISBNMap.get(panel); // 패널과 ISBN 매핑된 값 가져오기
+                JLabel purchaseQTYLabel = (JLabel) panel.getComponent(1); // 예시: 두 번째 컴포넌트에서 수량 추출
+
+                int purchaseQTY = Integer.parseInt(purchaseQTYLabel.getText());
+                String memberID = PaymentDialog.getMemberID(); // 입력받은 memberID 가져오기
+                Date purchaseDATE = new java.sql.Date(System.currentTimeMillis());
+
+                if (isValidISBN(bookISBN)) {
+                    if (purchaseMap.containsKey(bookISBN)) {
+                        // 이미 존재하는 ISBN이면 수량을 추가
+                        PaymentPurchaseDTO existingDTO = purchaseMap.get(bookISBN);
+                        existingDTO.setPurchaseQTY(existingDTO.getPurchaseQTY() + purchaseQTY);
+                    } else {
+                        // 새로운 ISBN이면 Map에 추가
+                        PaymentPurchaseDTO dto = new PaymentPurchaseDTO(purchaseQTY, purchaseDATE, memberID, bookISBN);
+                        purchaseMap.put(bookISBN, dto);
+                    }
+                } else {
+                }
+            }
+        }
+
+        // Map의 값을 List에 추가
+        purchaseDTOList.clear();
+        purchaseDTOList.addAll(purchaseMap.values());
+    }
+
+
+    private boolean isValidISBN(String bookISBN) {
+        // 이 메서드는 book_info 테이블에서 bookISBN이 존재하는지 확인합니다.
+        boolean isValid = false;
+        String sql = "SELECT COUNT(*) FROM book_info WHERE book_isbn = ?";
+        try (
+            Connection conn = new DBConnector().getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)
+        ) {
+            ps.setString(1, bookISBN);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    isValid = true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return isValid;
+    }
+    
+    // listboard에 아이템 추가하는 메서드 예시
+    private void addItemToListboard(String bookISBN, String bookTitle, int quantity, int price) {
+        JPanel productList = new JPanel();
+        productList.setLayout(null);
+        productList.setBackground(Color.WHITE);
+
+        JLabel productName = new JLabel(bookTitle);
+        productName.setForeground(new Color(22, 40, 80));
+        productName.setBounds(20, 0, 100, 40);
+        productList.add(productName);
+
+        JLabel productQTY = new JLabel(String.valueOf(quantity));
+        productQTY.setForeground(new Color(22, 40, 80));
+        productQTY.setBounds(190, 0, 20, 40);
+        productList.add(productQTY);
+
+        JLabel productPrice = new JLabel(price + "원");
+        productPrice.setForeground(new Color(22, 40, 80));
+        productPrice.setBounds(270, 0, 60, 40);
+        productList.add(productPrice);
+
+        listboard.add(productList);
+        listboard.revalidate();
+        listboard.repaint();
+
+        panelToISBNMap.put(productList, bookISBN); // 패널과 ISBN 매핑
+    }
+ 
 }

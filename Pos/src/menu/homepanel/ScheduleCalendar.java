@@ -135,6 +135,8 @@ public class ScheduleCalendar {
 		textBox.setFont(new Font("맑은 고딕", Font.BOLD, 16));
 		textBox.setForeground(Color.GRAY);
 		
+		
+		
         textBox.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -206,7 +208,7 @@ public class ScheduleCalendar {
 				titleTextFieldBack.setSize(400,80);
 				titleTextFieldBack.setLocation(0,0);
 				titleTextFieldBack.setBackground(backgroundPanel.getBackground());
-                JTextField titleTextField = new JTextField();
+                JTextField titleTextField = new JTextField("제목을 추가해 주세요.");
                 titleTextField.setBackground(backgroundPanel.getBackground());
                 titleTextField.setFont(font);
                 titleTextField.setForeground(new Color(22, 40, 80));
@@ -216,19 +218,20 @@ public class ScheduleCalendar {
                 titleTextField.addFocusListener(new FocusListener() {
                     @Override
                     public void focusGained(FocusEvent e) {
-                        if (titleTextField.getText().equals("제목을 입력하세요")) {
-                            titleTextField.setText("");
-                            titleTextField.setForeground(new Color(22, 40, 80));
+                        if (titleTextField.getText().equals("제목을 추가해 주세요.")) {
+                        	titleTextField.setText("");
+                        	titleTextField.setForeground(Color.BLACK);
                         }
                     }
 
                     @Override
                     public void focusLost(FocusEvent e) {
                         if (titleTextField.getText().isEmpty()) {
-                            titleTextField.setText("제목을 입력하세요");
-                            titleTextField.setForeground(new Color(22, 40, 80));
+                        	titleTextField.setText("제목을 추가해 주세요.");
                         }
                     }
+                    
+                    
                 });
                 titleTextFieldBack.add(titleTextField);
                 
@@ -240,7 +243,7 @@ public class ScheduleCalendar {
                 textAreaBack.setSize(400,500);
                 textAreaBack.setLocation(0,85);
                 textAreaBack.setBackground(backgroundPanel.getBackground());
-                JTextArea textArea = new JTextArea();
+                JTextArea textArea = new JTextArea("내용을 추가해 주세요.");
                 textArea.setBackground(backgroundPanel.getBackground());
                 textArea.setFont(font2);
                 textArea.setForeground(new Color(22, 40, 80));
@@ -251,21 +254,22 @@ public class ScheduleCalendar {
                 textArea.addFocusListener(new FocusListener() {
                     @Override
                     public void focusGained(FocusEvent e) {
-                        if (textArea.getText().equals("내용을 입력하세요")) {
-                            textArea.setText("");
-                            textArea.setForeground(new Color(22, 40, 80));
+                        if (textArea.getText().equals("내용을 추가해 주세요.")) {
+                        	textArea.setText("");
+                        	textArea.setForeground(Color.BLACK);
                         }
-                        
                     }
 
                     @Override
                     public void focusLost(FocusEvent e) {
                         if (textArea.getText().isEmpty()) {
-                            textArea.setText("내용을 입력하세요");
-                            textArea.setForeground(new Color(22, 40, 80));
+                        	textArea.setText("내용을 추가해 주세요.");
                         }
                     }
+                    
+                    
                 });
+                titleTextFieldBack.add(textArea);
                 textAreaBack.add(textArea);
                 
 				Font buttonFont = new Font("맑은 고딕", Font.BOLD, 20);

@@ -3,109 +3,103 @@ package menu.homepanel.dto;
 import java.sql.Date;
 
 public class BestSellerDTO {
-	String BOOK_ISBN;
-	String BOOK_TITLE;
-	String BOOK_CONTENT;
-	String PUBLISHER;
-	String AUTHOR;
-	Integer PRICE;
-	Date ISSUE_DATE;
-	String CATEGORY;
-	Integer ORDER_YN;
-	String THUMBNAIL;
-	Integer PURCHASE_ID;
-	Integer PURCHASE_QTY;
-	Date PURCHASE_DATE;
-	Integer PURCHASE_STATUS;
-	String MEMBER_ID;
-	public String getBOOK_ISBN() {
-		return BOOK_ISBN;
+	String bookIsbn;
+	String bookTitle;
+	String bookContent;
+	String publisher;
+	String author;
+	Integer price;
+	Date issueDate;
+	String thumbnail;
+ 	String category;
+	Integer purchaseID;
+	Integer purchaseQTY;
+	Date purchaseDATE;
+	String memberID;
+	Integer purchaseStatus;
+	public String getMemberID() {
+		return memberID;
 	}
-	public void setBOOK_ISBN(String bOOK_ISBN) {
-		BOOK_ISBN = bOOK_ISBN;
+	public void setMemberID(String memberID) {
+		this.memberID = memberID;
 	}
-	public String getBOOK_TITLE() {
-		return BOOK_TITLE;
+	public Integer getPurchaseStatus() {
+		return purchaseStatus;
 	}
-	public void setBOOK_TITLE(String bOOK_TITLE) {
-		BOOK_TITLE = bOOK_TITLE;
+	public void setPurchaseStatus(Integer purchaseStatus) {
+		this.purchaseStatus = purchaseStatus;
 	}
-	public String getBOOK_CONTENT() {
-		return BOOK_CONTENT;
+	public String getBookIsbn() {
+		return bookIsbn;
 	}
-	public void setBOOK_CONTENT(String bOOK_CONTENT) {
-		BOOK_CONTENT = bOOK_CONTENT;
+	public void setBookIsbn(String bookIsbn) {
+		this.bookIsbn = bookIsbn;
 	}
-	public String getPUBLISHER() {
-		return PUBLISHER;
+	public String getBookTitle() {
+		return bookTitle;
 	}
-	public void setPUBLISHER(String pUBLISHER) {
-		PUBLISHER = pUBLISHER;
+	public void setBookTitle(String bookTitle) {
+		this.bookTitle = bookTitle;
 	}
-	public String getAUTHOR() {
-		return AUTHOR;
+	public String getBookContent() {
+		return bookContent;
 	}
-	public void setAUTHOR(String aUTHOR) {
-		AUTHOR = aUTHOR;
+	public void setBookContent(String bookContent) {
+		this.bookContent = bookContent;
 	}
-	public Integer getPRICE() {
-		return PRICE;
+	public String getPublisher() {
+		return publisher;
 	}
-	public void setPRICE(Integer pRICE) {
-		PRICE = pRICE;
+	public void setPublisher(String publisher) {
+		this.publisher = publisher;
 	}
-	public Date getISSUE_DATE() {
-		return ISSUE_DATE;
+	public String getAuthor() {
+		return author;
 	}
-	public void setISSUE_DATE(Date iSSUE_DATE) {
-		ISSUE_DATE = iSSUE_DATE;
+	public void setAuthor(String author) {
+		this.author = author;
 	}
-	public String getCATEGORY() {
-		return CATEGORY;
+	public Integer getPrice() {
+		return price;
 	}
-	public void setCATEGORY(String cATEGORY) {
-		CATEGORY = cATEGORY;
+	public void setPrice(Integer price) {
+		this.price = price;
 	}
-	public Integer getORDER_YN() {
-		return ORDER_YN;
+	public Date getIssueDate() {
+		return issueDate;
 	}
-	public void setORDER_YN(Integer oRDER_YN) {
-		ORDER_YN = oRDER_YN;
+	public void setIssueDate(Date issueDate) {
+		this.issueDate = issueDate;
 	}
-	public String getTHUMBNAIL() {
-		return THUMBNAIL;
+	public String getThumbnail() {
+		return thumbnail;
 	}
-	public void setTHUMBNAIL(String tHUMBNAIL) {
-		THUMBNAIL = tHUMBNAIL;
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
 	}
-	public Integer getPURCHASE_ID() {
-		return PURCHASE_ID;
+	public String getCategory() {
+		return category;
 	}
-	public void setPURCHASE_ID(Integer pURCHASE_ID) {
-		PURCHASE_ID = pURCHASE_ID;
+	public void setCategory(String category) {
+		this.category = category;
 	}
-	public Integer getPURCHASE_QTY() {
-		return PURCHASE_QTY;
+	public Integer getPurchaseID() {
+		return purchaseID;
 	}
-	public void setPURCHASE_QTY(Integer pURCHASE_QTY) {
-		PURCHASE_QTY = pURCHASE_QTY;
+	public void setPurchaseID(Integer purchaseID) {
+		this.purchaseID = purchaseID;
 	}
-	public Date getPURCHASE_DATE() {
-		return PURCHASE_DATE;
+	public Integer getPurchaseQTY() {
+		return purchaseQTY;
 	}
-	public void setPURCHASE_DATE(Date pURCHASE_DATE) {
-		PURCHASE_DATE = pURCHASE_DATE;
+	public void setPurchaseQTY(Integer purchaseQTY) {
+		this.purchaseQTY = purchaseQTY;
 	}
-	public Integer getPURCHASE_STATUS() {
-		return PURCHASE_STATUS;
+	public Date getPurchaseDATE() {
+		return purchaseDATE;
 	}
-	public void setPURCHASE_STATUS(Integer pURCHASE_STATUS) {
-		PURCHASE_STATUS = pURCHASE_STATUS;
+	public void setPurchaseDATE(Date purchaseDATE) {
+		this.purchaseDATE = purchaseDATE;
 	}
-	public String getMEMBER_ID() {
-		return MEMBER_ID;
-	}
-	public void setMEMBER_ID(String mEMBER_ID) {
-		MEMBER_ID = mEMBER_ID;
-	}
+	
 }

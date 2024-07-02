@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import frame_utility.ButtonTool;
@@ -28,9 +27,9 @@ import menu.salestatus.query.SalesstatusQuery;
 public class Pos_SaleStatus {
     
     private LocalDate day; // 현재 날짜
+    private JPanel detailinfo; // 변경: detailinfo를 클래스 변수로
 
     private static ButtonTool[] buttons = new ButtonTool[4];
-   
 
     public JPanel createSaleStatus() {
         JPanel saleStatus = new JPanel();
@@ -49,7 +48,7 @@ public class Pos_SaleStatus {
         buttons[3] = ButtonTool.createButton("이번달", new Color(246,247,251), new Color(197,195,195),new Color(180, 181, 184), new Font("맑은 고딕", Font.BOLD, 18),75,75, false);
         buttons[3].setBounds(420,0,125,60);
         
-        JPanel detailinfo = new RoundPanelTool(15, Color.WHITE);
+        detailinfo = new RoundPanelTool(15, Color.WHITE); // 변경: detailinfo를 클래스 변수로
         detailinfo.setLayout(null);
         detailinfo.setBackground(new Color(246,247,251));
         detailinfo.setBounds(0,75,1100,360);        
@@ -68,8 +67,9 @@ public class Pos_SaleStatus {
             saleStatus.add(buttons[i]);
         }
         
+        // 자동으로 DB값으로 업데이트
+        updateDetailInfo(0, detailinfo);
         buttonChangeColor(buttons[0]);
-        updateDetailInfo(0, detailinfo);  
         
         JPanel calendar = new RoundPanelTool(15, Color.WHITE);
         calendar.setLayout(new GridLayout());
@@ -106,7 +106,7 @@ public class Pos_SaleStatus {
         }
     }
     
-    private void updateDetailInfo(int index, JPanel detailinfo) {
+    public void updateDetailInfo(int index, JPanel detailinfo) { // 변경: public으로
         LocalDate startDate = null;
         LocalDate endDate = LocalDate.now();
         
@@ -140,12 +140,12 @@ public class Pos_SaleStatus {
         List<PurchaseDTO> todaySalesList = sql.getSalesStatus(Date.valueOf(today), Date.valueOf(today));
         int todaySales = 0;
         for(PurchaseDTO dto : todaySalesList) {   
-        	todaySales += dto.getPRICE() * dto.getPURCHASE_QTY();
-        	
+            todaySales += dto.getPRICE() * dto.getPURCHASE_QTY();
+            
         }
         
         for(PurchaseDTO dto : salesList) {      	
-        	membernum.add(dto.getMEMBER_ID());
+            membernum.add(dto.getMEMBER_ID());
         }
         int memberCnt = membernum.size();
         
@@ -169,5 +169,9 @@ public class Pos_SaleStatus {
         detail.info(detailinfo, salesText, saleCount, usingPoint, memberCount,todaySalesText);
         detailinfo.revalidate();
         detailinfo.repaint();
+    }
+    
+    public JPanel getDetailInfoPanel() {
+        return detailinfo;
     }
 }
