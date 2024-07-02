@@ -8,23 +8,25 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.plaf.basic.BasicScrollBarUI;
+import java.sql.ResultSet;
 
 import db.DBConnector;
 import menu.orderlist.OrderDataFetcher;
 
 public class Pos_InventoryList {
 
-    private Object[][] data = new OrderDataFetcher().getinventoryList();
+    private Object[][] data = new OrderDataFetcher().getInventoryList();
     private JPanel orderPanel;
     private JScrollPane scrollPane;
 
@@ -45,7 +47,7 @@ public class Pos_InventoryList {
     }
 
     public void refreshOrderList() {
-        Object[][] defaultData = new OrderDataFetcher().getinventoryList();
+        Object[][] defaultData = new OrderDataFetcher().getInventoryList();
         updateOrderPanel(defaultData);
     }
 
@@ -150,11 +152,15 @@ public class Pos_InventoryList {
 
         JButton button = new JButton();
         updateButtonStatus(button, (int) row[7]);
+        int orderId = (int) row[8]; // order_id
+        button.putClientProperty("orderId", orderId);
+        button.putClientProperty("bookIsbn", row[2]);
+        button.putClientProperty("orderStatus", row[7]);
+
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                toggleOrderStatus(row); // 버튼을 클릭했을 때 order_status 값 토글
-                // 데이터베이스 업데이트와 화면 새로 고침은 toggleOrderStatus 내부에서 처리
+                toggleOrderStatus(button); // 버튼을 클릭했을 때 order_status 값 토글
             }
         });
 
@@ -180,28 +186,30 @@ public class Pos_InventoryList {
         button.setFont(new Font("맑은 고딕", Font.BOLD, 15));
     }
 
-    private void toggleOrderStatus(Object[] row) {
-        int currentStatus = (int) row[7];
+    private void toggleOrderStatus(JButton button) {
+        int currentStatus = (int) button.getClientProperty("orderStatus");
         int newStatus = (currentStatus == 1) ? 2 : 1;
-        row[7] = newStatus;
+        button.putClientProperty("orderStatus", newStatus);
+
+        int orderId = (int) button.getClientProperty("orderId");
+        String bookIsbn = (String) button.getClientProperty("bookIsbn");
 
         // 데이터베이스 업데이트
-        updateOrderStatusInDatabase((String) row[2], newStatus); // book_isbn을 기반으로 업데이트
+        updateOrderStatusInDatabase(orderId, newStatus);
 
         // 화면 새로 고침
         refreshOrderList();
     }
 
-    private void updateOrderStatusInDatabase(String bookIsbn, int newStatus) {
-        String sql = "UPDATE order_list SET order_status = ? WHERE book_isbn = ?";
+    private void updateOrderStatusInDatabase(int orderId, int newStatus) {
+        String sql = "UPDATE order_list SET order_status = ? WHERE order_id = ?";
         try (Connection conn = DBConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, newStatus);
-            pstmt.setString(2, bookIsbn);
+            pstmt.setInt(2, orderId);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
 }
