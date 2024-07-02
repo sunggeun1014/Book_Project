@@ -14,6 +14,7 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
+import menu.orderlist.ColumnNamesPanel;
 import menu.orderlist.Datetoolbar;
 import menu.orderlist.OrderDataFetcher;
 
@@ -31,7 +32,7 @@ public class Pos_OrderList {
         orderPanel.setLayout(null);
         
         dateToolbar = new Datetoolbar();
-        dateToolbar.setBounds(745, 25, 345, 50);
+        dateToolbar.setBounds(745, 25, 345, 51);
         dateToolbar.setOrderList(this);
         
         orderPanel.add(dateToolbar);
@@ -57,26 +58,13 @@ public class Pos_OrderList {
         updateOrderPanel(filteredData);
     }
 
+    
     private JPanel createColNamesPanel() {
-        JPanel columnPanel = new JPanel();
-        columnPanel.setLayout(null);
-        columnPanel.setBackground(Color.LIGHT_GRAY);
-        columnPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-        columnPanel.setPreferredSize(new Dimension(1000, 50));
-
-        String[] colNames = {"썸네일", "책 제목", "상품코드", "작가", "출판사", "수량", "날짜", "공급가"};
-        int[] x = {40, 140, 330, 490,630, 773, 860, 980};
+    	String[] colNames = {"썸네일", "책 제목", "상품코드", "작가", "출판사", "수량", "날짜", "공급가"};
+        int[] xPositions = {40, 140, 330, 490, 630, 773, 860, 980};
         int[] widths = {90, 150, 100, 120, 130, 80, 120, 100};
 
-        for (int i = 0; i < colNames.length; i++) {
-            JLabel colName = new JLabel(colNames[i]);
-            colName.setFont(new Font("맑은 고딕", Font.BOLD, 17));
-            colName.setForeground(new Color(22, 40, 80));
-            colName.setBounds(x[i], 0, widths[i], 50);
-            columnPanel.add(colName);
-            x[i] += widths[i];
-        }
-
+        ColumnNamesPanel columnPanel = new ColumnNamesPanel(colNames, xPositions, widths);
         return columnPanel;
     }
 
@@ -141,7 +129,7 @@ public class Pos_OrderList {
 
         ImageIcon thumbnail = (ImageIcon) row[0]; 
         JLabel thumbnailLabel = new JLabel(thumbnail);
-        thumbnailLabel.setBounds(10, 0, 100, 80); 
+        thumbnailLabel.setBounds(20, 3, 90, 75); 
         dataPanel.add(thumbnailLabel);
 
         String[] dataList = {(String) row[1], (String) row[2], (String) row[3],

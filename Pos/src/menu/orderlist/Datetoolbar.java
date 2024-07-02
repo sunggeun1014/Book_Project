@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.Properties;
 
 import javax.swing.JButton;
-import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JPanel;
 
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -42,7 +41,8 @@ public class Datetoolbar extends JPanel {
 
         // 시작 날짜 선택
         JDatePanelImpl startDatePanel = new JDatePanelImpl(startModel, p);
-        startDatePicker = new JDatePickerImpl(startDatePanel, new DateLabelFormatter("\tyyyy-MM-dd(E)", "\t시작날짜를 선택해 주세요."));
+        
+        startDatePicker = new JDatePickerImpl(startDatePanel, new DateLabelFormatter("\tyyyy-MM-dd (E)", "\t시작날짜를 선택해 주세요."));
         customizeDatePickerButton(startDatePicker, "▼");
         setComponentSize(startDatePicker, 350, 25);
         setComponentColors(startDatePanel, startDatePicker, Color.WHITE, Color.BLACK);
@@ -53,13 +53,14 @@ public class Datetoolbar extends JPanel {
         // 끝나는 날짜 선택
         UtilDateModel endModel = new UtilDateModel();
         JDatePanelImpl endDatePanel = new JDatePanelImpl(endModel, p);
-        endDatePicker = new JDatePickerImpl(endDatePanel, new DateLabelFormatter("\tyyyy-MM-dd(E)", "\t종료날짜를 선택해 주세요."));
+        endDatePicker = new JDatePickerImpl(endDatePanel, new DateLabelFormatter("\tyyyy-MM-dd (E)", "\t종료날짜를 선택해 주세요."));
+        
         customizeDatePickerButton(endDatePicker, "▼");
         setComponentSize(endDatePicker, 350, 25);
         setComponentColors(endDatePanel, endDatePicker, Color.WHITE, Color.BLACK);
 
-        endDatePanel.setBounds(0, 25, 345, 25);
-        endDatePicker.setBounds(0, 25, 345, 25);
+        endDatePanel.setBounds(0, 25, 345, 30);
+        endDatePicker.setBounds(0, 25, 345, 26);
 
         endDatePicker.addActionListener(e -> {
             handleSubmit(startDatePicker, endDatePicker);
