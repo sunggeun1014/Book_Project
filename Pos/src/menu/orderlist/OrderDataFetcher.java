@@ -89,4 +89,40 @@ public class OrderDataFetcher {
 	    }
 	    return new Object[0][]; 
 	}
+	
+	public Object[][] getinventoryList() {
+        String sql = "SELECT thumbnail, book_title, book_isbn, author, publisher, order_qty, purchase_date, order_status "
+                + "from order_list inner join book_info using(book_isbn) order by PURCHASE_DATE";
+
+        List<Object[]> dataList = new ArrayList<>();
+        
+        try (
+                Connection conn = connector.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                ResultSet rs = pstmt.executeQuery();
+        ) {
+        	
+            while (rs.next()) {
+                Object[] row = new Object[8];
+                row[0] = ImageUtils.createThumbnailIcon(rs.getString("book_isbn"));
+                row[1] = rs.getString("book_title");
+                row[2] = rs.getString("book_isbn");
+                row[3] = rs.getString("author");
+                row[4] = rs.getString("publisher");
+                row[5] = rs.getInt("order_qty");
+                row[6] = rs.getDate("purchase_date");
+                row[7] = rs.getInt("order_status");
+                dataList.add(row);
+            }
+            Object[][] data = new Object[dataList.size()][];
+            for (int i = 0; i < dataList.size(); i++) {
+                data[i] = dataList.get(i);
+            }
+            return data;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new Object[0][];
+    }
 }

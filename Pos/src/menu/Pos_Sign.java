@@ -135,26 +135,26 @@ public class Pos_Sign {
 	       
 	       Sign.addMouseListener(new MouseAdapter() {
 	    	   @Override
-	    	public void mouseReleased(MouseEvent e) {
-	    		   Utility u = new Utility();
-	    	       dto.setMemberId(userId.getText());
-	    	       dto.setPassword(new String(userPassword.getPassword()));
-	    	       dto.setName(userName.getText());
-	    	       dto.setAddress(userAdress.getText());
-	    	       dto.setDetailedAddress(userDetailAdress.getText());
-	    	       dto.setDetailedAddress(userDetailAdress.getText());
-	    	       dto.setPhoneNumber(userPhoneNumber.getText());
+				public void mouseReleased(MouseEvent e) {
+					Utility u = new Utility();
+					dto.setMemberId(userId.getText());
+					dto.setPassword(new String(userPassword.getPassword()));
+					dto.setName(userName.getText());
+					dto.setAddress(userAdress.getText());
+					dto.setDetailedAddress(userDetailAdress.getText());
+					dto.setDetailedAddress(userDetailAdress.getText());
+					dto.setPhoneNumber(userPhoneNumber.getText());
 
-	    		MembersQuery query = new MembersQuery();
-	    	    int result = query.createMember(dto);
-		    	    if(result == 0) {
-		    	    	u.popup("회원가입 실패 다시 시도해주세요.", frame,false);
+					MembersQuery query = new MembersQuery();
+					int result = query.createMember(dto);
+					if (result == 0) {
+						u.popup("회원가입 실패 다시 시도해주세요.", frame, false);
 
-		    	    }else {
-		    	    	u.popup("회원가입이 완료되었습니다.", frame,true);
-		    	    }
-	    	}
-		});
+					} else {
+						u.popup("회원가입이 완료되었습니다.", frame, true);
+					}
+				}
+			});
 
 	       frame.add(background);
 	       frame.setResizable(false);

@@ -14,6 +14,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -682,6 +683,8 @@ public class Pos_Payment {
                 int purchaseQTY = Integer.parseInt(purchaseQTYLabel.getText());
                 String memberID = PaymentDialog.getMemberID(); // 입력받은 memberID 가져오기
                 Date purchaseDATE = new java.sql.Date(System.currentTimeMillis());
+//                LocalDate localDate = LocalDate.of(2024, 6, 8);
+//                Date purchaseDATE = Date.valueOf(localDate);
 
                 if (isValidISBN(bookISBN)) {
                     if (purchaseMap.containsKey(bookISBN)) {
