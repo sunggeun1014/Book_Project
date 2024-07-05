@@ -23,6 +23,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -301,6 +302,9 @@ public class Pos_MemberManagement {
 		for(int i = 0; i < info.length; i++) {
 			JPanel panel = u.getRoundShape(14, 14);
 			info[i] = new JTextField();
+			if(i == 1) {
+				info[i] = new JPasswordField();
+			}
 			
 			panel.setLayout(null);
 			panel.setBounds(40, height, 450, 35);
@@ -322,7 +326,7 @@ public class Pos_MemberManagement {
 		MembersDTO dto = member.getMemberDetail(id);
 		
 		info[0].setText(dto.getMemberId());
-		info[1].setText("비밀번호");
+		info[1].setText("password");
 		info[2].setText(dto.getName());
 		info[3].setText(dto.getPhoneNumber());
 		info[4].setText(dto.getAddress());
@@ -338,7 +342,7 @@ public class Pos_MemberManagement {
 		info[1].setForeground(new Color(197, 197, 197));
 		
 		
-		setMbrTextBox(info[1], "비밀번호");
+		setMbrTextBox(info[1], "password");
 		setMbrTextBox(info[3], "ex) 010-0000-0000");
 		setMbrTextBox(info[4], "주소");
 		setMbrTextBox(info[5], "상세주소");
@@ -420,12 +424,12 @@ public class Pos_MemberManagement {
 	}
 	
 	private boolean memberValidation(JTextField[] field) {
-		if(field[1].getText() == null || field[1].getText().equals("") || field[1].getText().equals("비밀번호")) {
+		if(field[1].getText() == null || field[1].getText().equals("") || field[1].getText().equals("password")) {
 			u.popup("비밀번호를 입력해 주세요.", popup, false);
 			field[1].requestFocus();
 			return false;
 		} else if(field[1].getText().length() < 4 && field[1].getText().length() <= 30) {
-			u.popup("비밀번호의 길이는 최소 5자 최대 30자 입니다.", popup, false);
+			u.popup("길이는 최소 5자 최대 30자 입니다.", popup, false);
 			field[1].requestFocus();
 			return false;
 		} else if(!u.isPhoneNumber(field[3].getText()) || field[3].getText().equals("") || field[3].getText() == null) {
@@ -513,6 +517,6 @@ public class Pos_MemberManagement {
 		info[2].setFont(new Font("맑은 고딕", Font.BOLD, 20));
 		info[3].setFont(new Font("맑은 고딕", Font.BOLD, 16));
 		info[4].setFont(new Font("맑은 고딕", Font.BOLD, 16));
-		
+		info[4].setForeground(Color.RED);
 	}
 }
